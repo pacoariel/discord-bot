@@ -1,0 +1,20 @@
+{
+  "name": "projekt",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^13.9.0",
+    "better-sqlite3-helper": "^2.2.1",
+    "discord.js": "11.4.2",
+    "quick.db": "^7.0.0-b22",
+    "util": "^0.12.2"
+  },
+  "devDependencies": {},
+  "keywords": [],
+  "description": ""
+}
