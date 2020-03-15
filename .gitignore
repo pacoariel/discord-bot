@@ -2,3 +2,4 @@ node_modules/
 .DS_Store
 src/config.ts
 dist/config.js
+dist/json.sqlite
