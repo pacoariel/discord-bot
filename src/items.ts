@@ -10,5 +10,9 @@ export let grenade = {
 export let tank = {
     "cost": Number('100000'),
     "damage": Number('80'),
-    "extraDefense": Number(1000)
+    "extraDefense": Number(1000),
+    "requieres": "tank_bullet"
+}
+export let tank_bullet = {
+    "cost": Number(250)
 }

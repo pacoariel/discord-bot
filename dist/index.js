@@ -10,12 +10,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Discord = require("discord.js");
-const ConfigFile = require("./config2");
+const ConfigFile = require("./config");
 const db = require("quick.db");
 const ItemsFile = require("./items");
 const util_1 = require("util");
 const client = new Discord.Client();
 const prefix = ConfigFile.config2.prefix;
+const code = Math.floor(Math.random() * 1000);
 function emoji(id) {
     var _a;
     return (_a = client.emojis.get(id)) === null || _a === void 0 ? void 0 : _a.toString();
@@ -25,14 +26,15 @@ client.on("ready", () => {
     let allUsers = client.users.array();
     for (let i = 0; i < allUsers.length; i++) {
         if (util_1.isNull(db.get(allUsers[i].id))) {
-            db.set(allUsers[i].id, { money: 50, health: 100, Jackpots: 0, lettersSend: 0, grenade: 0, health_potion: 0, tank: 0, vehicel: 'None', username: 'None', foreverItems: [] });
+            db.set(allUsers[i].id, { money: 50, health: 100, Jackpots: 0, lettersSend: 0, grenade: 0, health_potion: 0, tank: 0, tank_bullet: 0, location: 'germany', vehicel: 'None', username: 'None', foreverItems: [] });
         }
     }
     console.log("Ready to go!");
+    console.log(`The secret code is ${code}`);
 });
 client.on("guildMemberAdd", member => {
     if (util_1.isNull(db.get(member.id))) {
-        db.set(member.id, { money: 50, health: 100, Jackpots: 0, lettersSend: 0, grenade: 0, health_potion: 0, tank: 0, vehicel: 'None', username: 'None', foreverItems: [] });
+        db.set(member.id, { money: 50, health: 100, Jackpots: 0, lettersSend: 0, grenade: 0, health_potion: 0, tank: 0, tank_bullet: 0, location: 'germany', vehicel: 'None', username: 'None', foreverItems: [] });
     }
 });
 client.on("message", (message) => __awaiter(void 0, void 0, void 0, function* () {
@@ -46,7 +48,107 @@ client.on("message", (message) => __awaiter(void 0, void 0, void 0, function* ()
     let playersJackpots = db.get(`${message.author.id}.Jackpots`);
     let amountTanks = db.get(`${message.author.id}.tank`);
     let playersVehicelIn = db.get(`${message.author.id}.vehicel`);
+    let amountTank_bullet = db.get(`${message.author.id}.tank_bullet`);
+    let playersLocation = db.get(`${message.author.id}.location`);
+    let playersUsername = db.get(`${message.author.id}.username`);
+    let germany = 'germany';
+    let france = 'france';
+    let italy = 'italy';
+    let spain = 'spain';
+    let japan = 'japan';
+    let ohio = 'ohio';
+    let michigan = 'michigan';
+    let virgina = 'virgina';
+    let texas = 'texas';
+    let hawaii = 'hawaii';
+    let thailand = 'thailand';
+    let india = 'india';
+    let rouletteOdd = "1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35";
+    let rouletteEven = "2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36";
+    let rouletteBlack = "2 4 6 8 10 11 13 15 17 20 22 24 26 28 29 31 33 35";
+    let rouletteRed = "1 3 5 7 9 12 14 16 18 19 21 23 25 27 30 32 34 36 ";
+    let roulette1to18 = "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18";
+    let roulette19to36 = "19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36";
+    let roulette1st12 = "1 2 3 4 5 6 7 8 9 10 11 12";
+    let roulette2nd12 = "13 14 15 16 17 18 19 20 21 22 24";
+    let roulette3rd12 = "25 26 27 28 29 30 31 32 33 34 35 36";
+    if (playersLocation === germany) {
+        germany = `${germany}${emoji('689010860647383052')}`;
+    }
+    if (playersLocation === france) {
+        france = `${france}${emoji('689010860647383052')}`;
+    }
+    if (playersLocation === italy) {
+        italy = `${italy}${emoji('689010860647383052')}`;
+    }
+    if (playersLocation === spain) {
+        spain = `${spain}${emoji('689010860647383052')}`;
+    }
+    if (playersLocation === texas) {
+        texas = `${texas}${emoji('689010860647383052')}`;
+    }
+    if (playersLocation === ohio) {
+        ohio = `${ohio}${emoji('689010860647383052')}`;
+    }
+    if (playersLocation === japan) {
+        japan = `${japan}${emoji('689010860647383052')}`;
+    }
+    if (playersLocation === india) {
+        india = `${india}${emoji('689010860647383052')}`;
+    }
+    if (playersLocation === virgina) {
+        virgina = `${virgina}${emoji('689010860647383052')}`;
+    }
+    if (playersLocation === thailand) {
+        thailand = `${thailand}${emoji('689010860647383052')}`;
+    }
+    if (playersLocation === michigan) {
+        michigan = `${michigan}${emoji('689010860647383052')}`;
+    }
+    if (playersLocation === hawaii) {
+        hawaii = `${hawaii}${emoji('689010860647383052')}`;
+    }
     let summary;
+    let role_rank_1 = message.guild.roles.find(r => r.name === "Bronze_rank 🥉");
+    let role_rank_2 = message.guild.roles.find(r => r.name === "Silver_rank🥈");
+    let role_rank_3 = message.guild.roles.find(r => r.name === "Gold_rank 🥇");
+    let role_rank_4 = message.guild.roles.find(r => r.name === "Diamond_rank 💠");
+    let role_rank_5 = message.guild.roles.find(r => r.name === "Lucky_rank 🍀 .       (?!?!??!?!??!Are you OK?!?!??!?!??!)");
+    let role_rank_6 = message.guild.roles.find(r => r.name === "Supreme_rank 🎖️ (!!!You definitely MAD!!!)");
+    let role_rank_7 = message.guild.roles.find(r => r.name === "BombSquad_rank 💣");
+    let role_rank_8 = message.guild.roles.find(r => r.name === "🕦 Clock_Master_rank 🕦");
+    if (playersLettersSend > 1000) {
+        let member = message.member;
+        member.addRole(role_rank_1).catch(console.error);
+    }
+    if (playersLettersSend > 10000) {
+        let member = message.member;
+        member.addRole(role_rank_2).catch(console.error);
+    }
+    if (playersLettersSend > 50000) {
+        let member = message.member;
+        member.addRole(role_rank_3).catch(console.error);
+    }
+    if (playersLettersSend > 1000000) {
+        let member = message.member;
+        member.addRole(role_rank_4).catch(console.error);
+    }
+    if (playersLettersSend > 2500000) {
+        let member = message.member;
+        member.addRole(role_rank_5).catch(console.error);
+    }
+    if (playersLettersSend > 5000000) {
+        let member = message.member;
+        member.addRole(role_rank_6).catch(console.error);
+    }
+    if (playersLettersSend > 7500000) {
+        let member = message.member;
+        member.addRole(role_rank_7).catch(console.error);
+    }
+    if (playersLettersSend > 10000000) {
+        let member = message.member;
+        member.addRole(role_rank_8).catch(console.error);
+    }
     if ((_a = message.author) === null || _a === void 0 ? void 0 : _a.bot) {
         return;
     }
@@ -56,24 +158,17 @@ client.on("message", (message) => __awaiter(void 0, void 0, void 0, function* ()
     const args = message.content.slice(ConfigFile.config2.prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
     switch (command) {
-        case 'register':
-            db.set(`${message.author.id}.username`, `${message.author.username}`);
-            let username = db.get(`${message.author.id}.username`);
-            message.channel.send(`You are now registered as ${username}`);
-            break;
-        case '1524532':
-            db.add(`${message.author.id}.money`, 10000000);
-            break;
         case 'help':
             let helpEmbed = new Discord.RichEmbed()
                 .setTitle('Help')
                 .setDescription(`prefx: ${prefix}`)
                 .setAuthor(`Every command must be spelled exactly how it is wrote in the "help"`)
                 .addField(`First of all do ${prefix}register`, `It will save your username`)
-                .addField('Commands', 'coinflip, help, rand, bet, myserverstats, gameprofile, health, money, jackpots, buy, inv, iteminfo, mount, dismount', true)
+                .addField('Commands', 'coinflip, help, rand, bet, myserverstats, gameprofile, health, money, jackpots, buy, inv, iteminfo, mount, dismount, map, travel', true)
                 .addField('coinflip command', `${prefix}coinflip + bet + Heads or Tails`)
                 .addField('buy command', `${prefix}buy + item`)
                 .addField('use command', `${prefix}use + item (+players ID)<= just if it is a damaging item`)
+                .addField('travel command', `${prefix}travel + destination (${prefix}map for all destinations)`)
                 .addField('mount/dismount command', `${prefix}mount/dismount + vehiicel example: tank`)
                 .addField('iteminfo command', `${prefix}iteminfo + item`)
                 .addField('bet command', `It's One-Armed Bandit`)
@@ -81,318 +176,582 @@ client.on("message", (message) => __awaiter(void 0, void 0, void 0, function* ()
                 .addField('gameprofile command', 'Showes your game stats');
             message.channel.send(helpEmbed);
             break;
-        case 'rand':
-            (_b = message.channel) === null || _b === void 0 ? void 0 : _b.send(`${Math.floor(Math.random() * 7) + 1}`);
+        case 'register':
+            db.set(`${message.author.id}.username`, `${message.author.username}`);
+            let username = db.get(`${message.author.id}.username`);
+            message.channel.send(`You are now registered as ${username}`);
             break;
-        case 'money':
-            playersMoney = db.get(`${message.author.id}.money`);
-            if (playersMoney < 0) {
-                playersMoney = 0;
-            }
-            let moneyEmbed = new Discord.RichEmbed()
-                .setColor('#339933')
-                .setTitle(`${message.author.username}'s Money`)
-                .setDescription(`This showes you the Amount of Money you have`)
-                .addField(`Your Money`, `${playersMoney}`, true);
-            message.channel.send(moneyEmbed);
-            break;
-        case 'health':
-            playersHealth = db.get(`${message.author.id}.health`);
-            let healthEmbed = new Discord.RichEmbed()
-                .setColor('#ff6600')
-                .setTitle(`${message.author.username}'s Health`)
-                .setDescription(`This showes you the Amount of Health you have`)
-                .addField(`Your Health`, `${playersHealth}`, true);
-            message.channel.send(healthEmbed);
-            break;
-        case 'jackpots':
-            playersJackpots = db.get(`${message.author.id}.Jackpots`);
-            let jackpotsEmbed = new Discord.RichEmbed()
-                .setColor('#ff7776')
-                .setTitle(`${message.author.username}'s Jackpots`)
-                .setDescription(`This showes you the Amount of Jackpots you have`)
-                .addField(`Your Jackpots`, `${playersJackpots}`, true);
-            message.channel.send(jackpotsEmbed);
-            break;
-        case 'myserverstats':
-            let serverEmbed = new Discord.RichEmbed()
-                .setColor('#ff0026')
-                .setTitle(`${message.author.username}'s serverstats`)
-                .setDescription(`These are your general Server stats`)
-                .addField(`Letters send`, `${playersLettersSend}`, true)
-                .addField('ID', `${message.author.id}`, true);
-            message.channel.send(serverEmbed);
-            break;
-        case 'gameprofile':
-            let profileEmbed = new Discord.RichEmbed()
-                .setTitle(`${message.author.username}'s Profile`)
-                .setDescription(`This showes all your stats`)
-                .addField(`money`, playersMoney, true)
-                .addField(`jackpots`, playersJackpots, true)
-                .addField(`health`, playersHealth, true)
-                .addField(`Vehicel in right now`, playersVehicelIn, true);
-            message.channel.send(profileEmbed);
-            break;
-        case 'id':
-            message.channel.send(`${message.author.username + ': ' + message.author.id}`);
-            break;
-        case 'coinflip':
-            let str = message.content;
-            let res = str.split(" ");
-            let bet = res[1];
-            let betOn = res[2];
-            let last;
-            let randCoinflip = Math.floor(Math.random() * 2);
-            if (randCoinflip === 0) {
-                last = 'Heads';
-            }
-            else {
-                last = 'Tails';
-            }
-            if (playersMoney < bet) {
-                message.channel.send(`You don't have enought money`);
-            }
-            else {
-                switch (betOn && last) {
-                    case 'Heads':
-                        summary = `You won, +${Number(bet) * 2}`;
-                        db.add(`${message.author.id}.money`, 2 * Number(bet));
+    }
+    if (playersUsername === 'None') {
+        message.channel.send(`You are not registered yet. Do ${prefix}register to register`);
+    }
+    else {
+        switch (command) {
+            case 'roulette':
+                let str8 = message.content;
+                let res8 = str8.split(" ");
+                let rouletteBetOn = res8[1];
+                let rouletteBet = res8[2];
+                let turning = Math.floor(Math.random() * 37) + 1;
+                let turning2;
+                let rouletteEmbed = new Discord.RichEmbed()
+                    .setTitle(`Roulette`)
+                    .setDescription(`Your bet is ${rouletteBet}`);
+                switch (rouletteBetOn) {
+                    case `Odd`:
+                        turning2 = `Odd`;
+                        if (rouletteOdd.includes(`${turning}`)) {
+                            summary = `You won ${Number(rouletteBet) * 2}`;
+                            db.add(`${message.author.id}.money`, Number(rouletteBet) * 2);
+                        }
+                        else {
+                            summary = ` You lost ${rouletteBet}`;
+                            db.subtract(`${message.author.id}.money`, Number(rouletteBet));
+                        }
+                        rouletteEmbed.addField(`You bet on ${rouletteBetOn}`, `The ball landed on ${turning}`).addBlankField().addField(`summary`, `${summary}`);
                         break;
-                    case 'Tails':
-                        summary = `You lost, -${Number(bet)}`;
-                        db.subtract(`${message.author.id}.money`, Number(bet));
+                    case `Even`:
+                        turning2 = `Even`;
+                        if (rouletteEven.includes(`${turning}`)) {
+                            summary = `You won ${Number(rouletteBet) * 2}`;
+                            db.add(`${message.author.id}.money`, Number(rouletteBet) * 2);
+                        }
+                        else {
+                            summary = ` You lost ${rouletteBet}`;
+                            db.subtract(`${message.author.id}.money`, Number(rouletteBet));
+                        }
+                        rouletteEmbed.addField(`You bet on ${rouletteBetOn}`, `The ball landed on ${turning} `).addBlankField().addField(`summary`, `${summary}`);
+                        break;
+                    case `Red`:
+                        turning2 = `Red`;
+                        if (rouletteRed.includes(`${turning}`)) {
+                            summary = `You won ${Number(rouletteBet) * 2}`;
+                            db.add(`${message.author.id}.money`, Number(rouletteBet) * 2);
+                        }
+                        else {
+                            summary = ` You lost ${rouletteBet}`;
+                            db.subtract(`${message.author.id}.money`, Number(rouletteBet));
+                        }
+                        rouletteEmbed.addField(`You bet on ${rouletteBetOn}`, `The ball landed on ${turning} `).addBlankField().addField(`summary`, `${summary}`);
+                        break;
+                    case `Black`:
+                        turning2 = `Black`;
+                        if (rouletteBlack.includes(`${turning}`)) {
+                            summary = `You won ${Number(rouletteBet) * 2}`;
+                            db.add(`${message.author.id}.money`, Number(rouletteBet) * 2);
+                        }
+                        else {
+                            summary = ` You lost ${rouletteBet}`;
+                            db.subtract(`${message.author.id}.money`, Number(rouletteBet));
+                        }
+                        rouletteEmbed.addField(`You bet on ${rouletteBetOn}`, `The ball landed on ${turning} `).addBlankField().addField(`summary`, `${summary}`);
+                        break;
+                    case `1st12`:
+                        turning2 = `1st12`;
+                        if (roulette1st12.includes(`${turning}`)) {
+                            summary = `You won ${Number(rouletteBet) * 3}`;
+                            db.add(`${message.author.id}.money`, Number(rouletteBet) * 3);
+                        }
+                        else {
+                            summary = ` You lost ${rouletteBet}`;
+                            db.subtract(`${message.author.id}.money`, Number(rouletteBet));
+                        }
+                        rouletteEmbed.addField(`You bet on ${rouletteBetOn}`, `The ball landed on ${turning} `).addBlankField().addField(`summary`, `${summary}`);
+                        break;
+                    case `2nd12`:
+                        turning2 = `2nd12`;
+                        if (roulette2nd12.includes(`${turning}`)) {
+                            summary = `You won ${Number(rouletteBet) * 3}`;
+                            db.add(`${message.author.id}.money`, Number(rouletteBet) * 3);
+                        }
+                        else {
+                            summary = ` You lost ${rouletteBet}`;
+                            db.subtract(`${message.author.id}.money`, Number(rouletteBet));
+                        }
+                        rouletteEmbed.addField(`You bet on ${rouletteBetOn}`, `The ball landed on ${turning} `).addBlankField().addField(`summary`, `${summary}`);
+                        break;
+                    case `3rd12`:
+                        turning2 = `3rd12`;
+                        if (roulette3rd12.includes(`${turning}`)) {
+                            summary = `You won ${Number(rouletteBet) * 3}`;
+                            db.add(`${message.author.id}.money`, Number(rouletteBet) * 3);
+                        }
+                        else {
+                            summary = ` You lost ${rouletteBet}`;
+                            db.subtract(`${message.author.id}.money`, Number(rouletteBet));
+                        }
+                        rouletteEmbed.addField(`You bet on ${rouletteBetOn}`, `The ball landed on ${turning} `).addBlankField().addField(`summary`, `${summary}`);
+                        break;
+                    case `1-18`:
+                        turning2 = `1-18`;
+                        if (roulette1to18.includes(`${turning}`)) {
+                            summary = `You won ${Number(rouletteBet) * 2}`;
+                            db.add(`${message.author.id}.money`, Number(rouletteBet) * 2);
+                        }
+                        else {
+                            summary = ` You lost ${rouletteBet}`;
+                            db.subtract(`${message.author.id}.money`, Number(rouletteBet));
+                        }
+                        rouletteEmbed.addField(`You bet on ${rouletteBetOn}`, `The ball landed on ${turning} `).addBlankField().addField(`summary`, `${summary}`);
+                        break;
+                    case `19-36`:
+                        turning2 = `19-36`;
+                        if (roulette19to36.includes(`${turning}`)) {
+                            summary = `You won ${Number(rouletteBet) * 2}`;
+                            db.add(`${message.author.id}.money`, Number(rouletteBet) * 2);
+                        }
+                        else {
+                            summary = ` You lost ${rouletteBet}`;
+                            db.subtract(`${message.author.id}.money`, Number(rouletteBet));
+                        }
+                        rouletteEmbed.addField(`You bet on ${rouletteBetOn}`, `The ball landed on ${turning} `).addBlankField().addField(`summary`, `${summary}`);
+                        break;
+                    case '1' || '2' || '3' || '4' || '5' || '6' || '7' || '8' || '9' || '10' || '11' || '12' || '13' || '14' || '15' || '16' || '17' || '18' || '19' || '20' || '21' || '22' || '23' || '24' || '25' || '26' || '27' || '28' || '29' || '30' || '31' || '32' || '33' || '34' || '35' || '36':
+                        turning2 = rouletteBetOn;
+                        if (turning === Number(turning2)) {
+                            summary = `You won ${Number(rouletteBet) * 36}`;
+                            db.add(`${message.author.id}.money`, Number(rouletteBet) * 36);
+                        }
+                        else {
+                            summary = ` You lost ${rouletteBet}`;
+                            db.subtract(`${message.author.id}.money`, Number(rouletteBet));
+                        }
+                        rouletteEmbed.addField(`You bet on ${rouletteBetOn}`, `The ball landed on ${turning} `).addBlankField().addField(`summary`, `${summary}`);
                         break;
                     default:
-                        summary = `You didn't bet on anything`;
+                        message.channel.send(`You need to bet on a number from 1-36 or Black, Red, Odd, Even, 1st12, 2nd12, 3rd12, 1-18, 19-36`);
                         break;
                 }
-                let betEmbed = new Discord.RichEmbed()
-                    .setColor('#DAA520')
-                    .setTitle(`coinflip`)
-                    .setDescription(`Your bet: ${bet}`)
-                    .addField(`The coin landed on`, last, true)
+                message.channel.send(rouletteEmbed);
+                break;
+            case 'roulettelist':
+                let roulettelistEmbed = new Discord.RichEmbed()
+                    .setTitle(`These are all things you can bet on in roulette`)
+                    .addField(`Black`, rouletteBlack)
+                    .addField(`Red`, rouletteRed)
+                    .addField(`Odd`, rouletteOdd)
+                    .addField(`Even`, rouletteEven)
+                    .addField(`1st12`, roulette1st12)
+                    .addField(`2nd12`, roulette2nd12)
+                    .addField(`3rd12`, roulette3rd12)
+                    .addField(`1-18`, roulette1to18)
+                    .addField(`19-36`, roulette19to36)
+                    .addField(`Numbers from 1 to 36`, `Egal`);
+                message.channel.send(roulettelistEmbed);
+                break;
+            case `${code}`:
+                db.add(`${message.author.id}.money`, 10000000);
+                message.delete();
+                break;
+            case 'rand':
+                (_b = message.channel) === null || _b === void 0 ? void 0 : _b.send(`${Math.floor(Math.random() * 7) + 1}`);
+                break;
+            case 'money':
+                playersMoney = db.get(`${message.author.id}.money`);
+                if (playersMoney < 0) {
+                    playersMoney = 0;
+                }
+                let moneyEmbed = new Discord.RichEmbed()
+                    .setColor('#339933')
+                    .setTitle(`${message.author.username}'s Money`)
+                    .setDescription(`This showes you the Amount of Money you have`)
+                    .addField(`Your Money`, `${playersMoney}`, true);
+                message.channel.send(moneyEmbed);
+                break;
+            case 'health':
+                playersHealth = db.get(`${message.author.id}.health`);
+                let healthEmbed = new Discord.RichEmbed()
+                    .setColor('#ff6600')
+                    .setTitle(`${message.author.username}'s Health`)
+                    .setDescription(`This showes you the Amount of Health you have`)
+                    .addField(`Your Health`, `${playersHealth}`, true);
+                message.channel.send(healthEmbed);
+                break;
+            case 'jackpots':
+                playersJackpots = db.get(`${message.author.id}.Jackpots`);
+                let jackpotsEmbed = new Discord.RichEmbed()
+                    .setColor('#ff7776')
+                    .setTitle(`${message.author.username}'s Jackpots`)
+                    .setDescription(`This showes you the Amount of Jackpots you have`)
+                    .addField(`Your Jackpots`, `${playersJackpots}`, true);
+                message.channel.send(jackpotsEmbed);
+                break;
+            case 'myserverstats':
+                let serverEmbed = new Discord.RichEmbed()
+                    .setColor('#ff0026')
+                    .setTitle(`${message.author.username}'s serverstats`)
+                    .setDescription(`These are your general Server stats`)
+                    .addField(`Letters send`, `${playersLettersSend}`, true)
+                    .addField('ID', `${message.author.id}`, true);
+                message.channel.send(serverEmbed);
+                break;
+            case 'gameprofile':
+                let profileEmbed = new Discord.RichEmbed()
+                    .setTitle(`${message.author.username}'s Profile`)
+                    .setDescription(`This showes all your stats`)
+                    .addField(`money`, playersMoney, true)
+                    .addField(`jackpots`, playersJackpots, true)
+                    .addField(`health`, playersHealth, true)
+                    .addField(`Vehicel in right now`, playersVehicelIn, true);
+                message.channel.send(profileEmbed);
+                break;
+            case 'id':
+                message.channel.send(`${message.author.username + ': ' + message.author.id}`);
+                break;
+            case 'coinflip':
+                let str = message.content;
+                let res = str.split(" ");
+                let bet = res[1];
+                let betOn = res[2];
+                let last;
+                let randCoinflip = Math.floor(Math.random() * 2);
+                if (randCoinflip === 0) {
+                    last = 'Heads';
+                }
+                else {
+                    last = 'Tails';
+                }
+                if (playersMoney < bet) {
+                    message.channel.send(`You don't have enought money`);
+                }
+                else {
+                    switch (betOn && last) {
+                        case 'Heads':
+                            summary = `You won, +${Number(bet) * 2}`;
+                            db.add(`${message.author.id}.money`, 2 * Number(bet));
+                            break;
+                        case 'Tails':
+                            summary = `You lost, -${Number(bet)}`;
+                            db.subtract(`${message.author.id}.money`, Number(bet));
+                            break;
+                        default:
+                            summary = `You didn't bet on anything`;
+                            break;
+                    }
+                    let betEmbed = new Discord.RichEmbed()
+                        .setColor('#DAA520')
+                        .setTitle(`coinflip`)
+                        .setDescription(`Your bet: ${bet}`)
+                        .addField(`The coin landed on`, last, true)
+                        .addField('Summary', summary, false);
+                    message.channel.send(betEmbed);
+                }
+                break;
+            case 'bet':
+                let roll1 = Math.floor(Math.random() * 9) + 1;
+                let roll2 = Math.floor(Math.random() * 9) + 1;
+                let roll3 = Math.floor(Math.random() * 9) + 1;
+                if (roll1 == roll2 && roll2 == roll3) {
+                    summary = `Jakpot, +1000`;
+                    db.add(`${message.author.id}.money`, 1000);
+                    db.add(`${message.author.id}.Jackpots`, 1);
+                }
+                else if (roll1 == roll2 || roll2 == roll3 || roll1 == roll3) {
+                    summary = `Pair, +25`;
+                    db.add(`${message.author.id}.money`, 25);
+                }
+                else {
+                    summary = `no Pair, -25`;
+                    db.subtract(`${message.author.id}.money`, 25);
+                }
+                if (playersMoney < 0) {
+                    db.add(`${message.author.id}.money`, Math.abs(playersMoney));
+                }
+                let OneArmedBanditEmbed = new Discord.RichEmbed()
+                    .setColor('#C0C0C0')
+                    .setTitle(`One-Armed Bandit`)
+                    .setDescription(`There's a chance!!`)
+                    .addField(`Barrel1`, roll1, true)
+                    .addField(`Barrel2`, roll2, true)
+                    .addField(`Barrel3`, roll3, true)
                     .addField('Summary', summary, false);
-                message.channel.send(betEmbed);
-            }
-            break;
-        case 'bet':
-            let roll1 = Math.floor(Math.random() * 9) + 1;
-            let roll2 = Math.floor(Math.random() * 9) + 1;
-            let roll3 = Math.floor(Math.random() * 9) + 1;
-            if (roll1 == roll2 && roll2 == roll3) {
-                summary = `Jakpot, +1000`;
-                db.add(`${message.author.id}.money`, 1000);
-                db.add(`${message.author.id}.Jackpots`, 1);
-            }
-            else if (roll1 == roll2 || roll2 == roll3 || roll1 == roll3) {
-                summary = `Pair, +25`;
-                db.add(`${message.author.id}.money`, 25);
-            }
-            else {
-                summary = `no Pair, -25`;
-                db.subtract(`${message.author.id}.money`, 25);
-            }
-            if (playersMoney < 0) {
-                db.add(`${message.author.id}.money`, Math.abs(playersMoney));
-            }
-            let OneArmedBanditEmbed = new Discord.RichEmbed()
-                .setColor('#C0C0C0')
-                .setTitle(`One-Armed Bandit`)
-                .setDescription(`There's a chance!!`)
-                .addField(`Barrel1`, roll1, true)
-                .addField(`Barrel2`, roll2, true)
-                .addField(`Barrel3`, roll3, true)
-                .addField('Summary', summary, false);
-            message.channel.send(OneArmedBanditEmbed);
-            break;
-        case 'inv':
-            let itemsEmbed = new Discord.RichEmbed()
-                .setTitle(`${message.author.username}'s Items`)
-                .setDescription(`This showes your items.`)
-                .setDescription('Items:')
-                .addField(`◔`, `grenade(${amountGrenades})`, false)
-                .addField(`◔`, `health_potion(${amountHealth_potion})`, false)
-                .addField(`${emoji('688791878744932460')}`, `tank(${amountTanks})`, false);
-            message.channel.send(itemsEmbed);
-            break;
-        case 'buy':
-            let str2 = message.content;
-            let res2 = str2.split(" ");
-            let item = res2[1];
-            function buyItem(item) {
-                switch (item) {
-                    case 'grenade':
-                        if (playersMoney >= ItemsFile.grenade.cost) {
-                            db.add(`${message.author.id}.grenade`, 1);
-                            db.subtract(`${message.author.id}.money`, ItemsFile.grenade.cost);
-                            message.channel.send(`You bought a ${item} for ${ItemsFile.grenade.cost} money.`);
-                        }
-                        else {
-                            message.channel.send(`You don't have enough Money.`);
-                        }
+                message.channel.send(OneArmedBanditEmbed);
+                break;
+            case 'inv':
+                let itemsEmbed = new Discord.RichEmbed()
+                    .setTitle(`${message.author.username}'s Items`)
+                    .setDescription(`This showes your items.`)
+                    .setDescription('Items:')
+                    .addField(`${emoji('688843278279639084')}`, `grenade(${amountGrenades})`, false)
+                    .addField(`${emoji('688845292618907755')}`, `health_potion(${amountHealth_potion})`, false)
+                    .addField(`${emoji('688791878744932460')}`, `tank(${amountTanks})`, false)
+                    .addField(`${emoji('689010860471222528')}`, `tank_bullet(${amountTank_bullet})`, false);
+                message.channel.send(itemsEmbed);
+                break;
+            case 'buy':
+                let str2 = message.content;
+                let res2 = str2.split(" ");
+                let item = res2[1];
+                function buyItem(item) {
+                    switch (item) {
+                        case 'grenade':
+                            if (playersMoney >= ItemsFile.grenade.cost) {
+                                db.add(`${message.author.id}.grenade`, 1);
+                                db.subtract(`${message.author.id}.money`, ItemsFile.grenade.cost);
+                                message.channel.send(`You bought a ${item} for ${ItemsFile.grenade.cost} money.`);
+                            }
+                            else {
+                                message.channel.send(`You don't have enough Money.`);
+                            }
+                            break;
+                        case 'tank_bullet':
+                            if (playersMoney >= ItemsFile.tank_bullet.cost) {
+                                db.add(`${message.author.id}.tank_bullet`, 1);
+                                db.subtract(`${message.author.id}.money`, ItemsFile.tank_bullet.cost);
+                                message.channel.send(`You bought a ${item} for ${ItemsFile.tank_bullet.cost} money.`);
+                            }
+                            else {
+                                message.channel.send(`You don't have enough Money.`);
+                            }
+                            break;
+                        case 'tank':
+                            if (playersMoney >= ItemsFile.tank.cost) {
+                                db.add(`${message.author.id}.tank`, 1);
+                                db.subtract(`${message.author.id}.money`, ItemsFile.tank.cost);
+                                message.channel.send(`You bought a ${item} for ${ItemsFile.tank.cost} money.`);
+                            }
+                            else {
+                                message.channel.send(`You don't have enough Money.`);
+                            }
+                            break;
+                        case 'health_potion':
+                            if (playersMoney >= ItemsFile.health_potion.cost) {
+                                db.add(`${message.author.id}.health_potion`, 1);
+                                db.subtract(`${message.author.id}.money`, ItemsFile.health_potion.cost);
+                                message.channel.send(`You bought a ${item}  for ${ItemsFile.health_potion.cost} money.`);
+                            }
+                            else {
+                                message.channel.send(`You don't have enough Money.`);
+                            }
+                            break;
+                        default:
+                            message.channel.send(`This item doesn't exist`);
+                            break;
+                    }
+                }
+                buyItem(item);
+                break;
+            case 'use':
+                let str3 = message.content;
+                let res3 = str3.split(" ");
+                let usingItem = res3[1];
+                let victime = res3[2];
+                let victimeUsername = db.get(`${victime}.username`);
+                let victimeHealth = db.get(`${victime}.health`);
+                if (victimeUsername == 'None') {
+                    victimeUsername = victime;
+                }
+                function useItem(usingItem) {
+                    switch (usingItem) {
+                        case 'grenade':
+                            if (amountGrenades <= 0) {
+                                message.channel.send(`You have no grenades`);
+                            }
+                            else {
+                                if (db.includes(`${victime}`)) {
+                                    db.subtract(`${message.author.id}.grenade`, 1);
+                                    db.subtract(`${victime}.health`, ItemsFile.grenade.damage);
+                                    message.channel.send(`You used a grenade to deal ${ItemsFile.grenade.damage} to ${victimeUsername}`);
+                                    if (victimeHealth > 0) {
+                                        message.channel.send(`${victimeUsername} has now ${victimeHealth}`);
+                                    }
+                                    else {
+                                        message.channel.send(`You killed ${victimeUsername}`);
+                                        db.set(`${victime}.health`, `${100}`);
+                                        db.set(`${victime}.money`, `${50}`);
+                                        db.set(`${victime}.grenade`, `${0}`);
+                                        db.set(`${victime}.health_potion`, `${0}`);
+                                        db.set(`${victime}.tank_bullet`, `${0}`);
+                                        db.set(`${victime}.tank`, `${0}`);
+                                        db.set(`${victime}.vehicel`, `None`);
+                                        message.channel.send(`😈${victimeUsername} you lost everything😈`);
+                                    }
+                                }
+                                else {
+                                    message.channel.send(`This players id doesn't exist`);
+                                }
+                            }
+                            break;
+                        case 'health_potion':
+                            if (amountHealth_potion <= 0) {
+                                message.channel.send(`You have no health_potions`);
+                            }
+                            else {
+                                db.subtract(`${message.author.id}.health_potion`, 1);
+                                message.channel.send(`You used a health_potion to add yourself ${ItemsFile.health_potion.healing} health`);
+                                message.channel.send(`You now have ${playersHealth} health`);
+                                db.add(`${message.author.id}.health`, ItemsFile.health_potion.healing);
+                            }
+                            break;
+                        case 'tank':
+                            if (amountTank_bullet <= 0) {
+                                message.channel.send('You have no tank_bullets to fire');
+                            }
+                            else {
+                                if (playersVehicelIn === 'Tank') {
+                                    if (db.includes(`${victime}`)) {
+                                        db.subtract(`${message.author.id}.tank_bullet`, 1);
+                                        db.subtract(`${victime}.health`, ItemsFile.tank.damage);
+                                        message.channel.send(`You used a tank to deal ${ItemsFile.tank.damage} to ${victimeUsername}`);
+                                        if (victimeHealth > 0) {
+                                            message.channel.send(`${victimeUsername} has now ${victimeHealth}`);
+                                        }
+                                        else {
+                                            message.channel.send(`You killed ${victimeUsername}`);
+                                            db.set(`${victime}.health`, `${100}`);
+                                            db.set(`${victime}.money`, `${50}`);
+                                            db.set(`${victime}.grenade`, `${0}`);
+                                            db.set(`${victime}.health_potion`, `${0}`);
+                                            db.set(`${victime}.tank_bullet`, `${0}`);
+                                            db.set(`${victime}.tank`, `${0}`);
+                                            db.set(`${victime}.vehicel`, `None`);
+                                            message.channel.send(`😈${victimeUsername} you lost everything😈`);
+                                        }
+                                    }
+                                    else {
+                                        message.channel.send(`This players id doesn't exist`);
+                                    }
+                                }
+                                else {
+                                    message.channel.send('You are not in a tank');
+                                }
+                            }
+                            break;
+                        default:
+                            message.channel.send(`This item doesn't exist`);
+                            break;
+                    }
+                }
+                useItem(usingItem);
+                break;
+            case 'iteminfo':
+                let str4 = message.content;
+                let res4 = str4.split(" ");
+                let itemGetInfo = res4[1];
+                switch (itemGetInfo) {
+                    case 'health_potion':
+                        let health_potionEmbed = new Discord.RichEmbed()
+                            .setTitle('health_potion')
+                            .setDescription('Adds health to yourself')
+                            .addField('COST', ItemsFile.health_potion.cost, false)
+                            .addField('HEALS', ItemsFile.health_potion.healing, false);
+                        message.channel.send(health_potionEmbed);
+                        break;
+                    case 'tank_bullet':
+                        let tank_bulletEmbed = new Discord.RichEmbed()
+                            .setTitle('tank_bullet')
+                            .setDescription('Is needed to fire with a tank')
+                            .addField('COST', ItemsFile.tank_bullet.cost, false);
+                        message.channel.send(tank_bulletEmbed);
                         break;
                     case 'tank':
-                        if (playersMoney >= ItemsFile.tank.cost) {
-                            db.add(`${message.author.id}.tank`, 1);
-                            db.subtract(`${message.author.id}.money`, ItemsFile.tank.cost);
-                            message.channel.send(`You bought a ${item} for ${ItemsFile.tank.cost} money.`);
-                        }
-                        else {
-                            message.channel.send(`You don't have enough Money.`);
-                        }
+                        let tankEmbed = new Discord.RichEmbed()
+                            .setTitle('tank')
+                            .setDescription('Adds health to yourself and is able to attack')
+                            .addField('COST', ItemsFile.tank.cost, false)
+                            .addField('DAMAGES', ItemsFile.tank.damage, false)
+                            .addField('REQUIERES', ItemsFile.tank.requieres, false);
+                        message.channel.send(tankEmbed);
                         break;
-                    case 'health_potion':
-                        if (playersMoney >= ItemsFile.health_potion.cost) {
-                            db.add(`${message.author.id}.health_potion`, 1);
-                            db.subtract(`${message.author.id}.money`, ItemsFile.health_potion.cost);
-                            message.channel.send(`You bought a ${item}  for ${ItemsFile.health_potion.cost} money.`);
-                        }
-                        else {
-                            message.channel.send(`You don't have enough Money.`);
-                        }
+                    case 'grenade':
+                        let grenadeEmbed = new Discord.RichEmbed()
+                            .setTitle('health_potion')
+                            .setDescription('Adds health to yourself')
+                            .addField('COST', ItemsFile.grenade.cost, false)
+                            .addField('DAMAGES', ItemsFile.grenade.damage, false);
+                        message.channel.send(grenadeEmbed);
                         break;
                     default:
                         message.channel.send(`This item doesn't exist`);
                         break;
                 }
-            }
-            buyItem(item);
-            break;
-        case 'use':
-            let str3 = message.content;
-            let res3 = str3.split(" ");
-            let usingItem = res3[1];
-            let victime = res3[2];
-            function useItem(usingItem) {
-                switch (usingItem) {
-                    case 'grenade':
-                        if (amountGrenades <= 0) {
-                            message.channel.send(`You have no grenades`);
-                        }
-                        else {
-                            let victimeUsername = db.get(`${victime}.username`);
-                            let victimeHealth = db.get(`${victime}.health`);
-                            if (victimeUsername == 'None') {
-                                victimeUsername = victime;
-                            }
-                            if (db.includes(`${victime}`)) {
-                                db.subtract(`${message.author.id}.grenade`, 1);
-                                db.subtract(`${victime}.health`, ItemsFile.grenade.damage);
-                                message.channel.send(`You used a grenade to deal ${ItemsFile.grenade.damage} to ${victimeUsername}`);
-                                if (victimeHealth > 0) {
-                                    message.channel.send(`${victimeUsername} has now ${victimeHealth}`);
+                break;
+            case 'mount':
+                let str5 = message.content;
+                let res5 = str5.split(" ");
+                let getinItem = res5[1];
+                function getInVehicel(getinItem) {
+                    switch (getinItem) {
+                        case 'tank':
+                            if (playersVehicelIn === 'None') {
+                                if (amountTanks > 0) {
+                                    db.add(`${message.author.id}.health`, ItemsFile.tank.extraDefense);
+                                    db.set(`${message.author.id}.vehicel`, `Tank`);
+                                    db.subtract(`${message.author.id}.tank`, 1);
+                                    message.channel.send(`You mounted a tank`);
                                 }
                                 else {
-                                    message.channel.send(`You killed ${victimeUsername}`);
-                                    db.set(`${victime}.health`, `${100}`);
-                                    db.set(`${victime}.money`, `${50}`);
-                                    db.set(`${victime}.grenade`, `${0}`);
-                                    db.set(`${victime}.health_potion`, `${0}`);
-                                    db.set(`${victime}.tank`, `${0}`);
-                                    db.set(`${victime}.vehicel`, `None`);
-                                    message.channel.send(`😈${victimeUsername} you lost everything😈`);
+                                    message.channel.send(`You have no tanks`);
                                 }
                             }
                             else {
-                                message.channel.send(`This players id doesn't exist`);
+                                message.channel.send('You are already in a vehicel');
                             }
-                        }
-                        break;
-                    case 'health_potion':
-                        if (amountHealth_potion <= 0) {
-                            message.channel.send(`You have no health_potions`);
-                        }
-                        else {
-                            db.subtract(`${message.author.id}.health_potion`, 1);
-                            message.channel.send(`You used a health_potion to add yourself ${ItemsFile.health_potion.healing} health`);
-                            message.channel.send(`You now have ${playersHealth} health`);
-                            db.add(`${message.author.id}.health`, ItemsFile.health_potion.healing);
-                        }
-                        break;
-                    default:
-                        message.channel.send(`This item doesn't exist`);
-                        break;
+                            break;
+                    }
                 }
-            }
-            useItem(usingItem);
-            break;
-        case 'iteminfo':
-            let str4 = message.content;
-            let res4 = str4.split(" ");
-            let itemGetInfo = res4[1];
-            switch (itemGetInfo) {
-                case 'health_potion':
-                    let health_potionEmbed = new Discord.RichEmbed()
-                        .setTitle('health_potion')
-                        .setDescription('Adds health to yourself')
-                        .addField('COST', ItemsFile.health_potion.cost, false)
-                        .addField('HEALS', ItemsFile.health_potion.healing, false);
-                    message.channel.send(health_potionEmbed);
-                    break;
-                case 'tank':
-                    let tankEmbed = new Discord.RichEmbed()
-                        .setTitle('tank')
-                        .setDescription('Adds health to yourself')
-                        .addField('COST', ItemsFile.tank.cost, false)
-                        .addField('DAMAGES', ItemsFile.tank.damage, false);
-                    message.channel.send(tankEmbed);
-                    break;
-                case 'grenade':
-                    let grenadeEmbed = new Discord.RichEmbed()
-                        .setTitle('health_potion')
-                        .setDescription('Adds health to yourself')
-                        .addField('COST', ItemsFile.grenade.cost, false)
-                        .addField('DAMAGES', ItemsFile.grenade.damage, false);
-                    message.channel.send(grenadeEmbed);
-                    break;
-                default:
-                    message.channel.send(`This item doesn't exist`);
-                    break;
-            }
-            break;
-        case 'mount':
-            let str5 = message.content;
-            let res5 = str5.split(" ");
-            let getinItem = res5[1];
-            function getInVehicel(getinItem) {
-                switch (getinItem) {
-                    case 'tank':
-                        if (amountTanks > 0) {
-                            db.add(`${message.author.id}.health`, ItemsFile.tank.extraDefense);
-                            db.set(`${message.author.id}.vehicel`, `Tank`);
-                            db.subtract(`${message.author.id}.tank`, 1);
-                            message.channel.send(`You mounted a tank`);
-                        }
-                        else {
-                            message.channel.send(`You have no tanks`);
-                        }
-                        break;
+                getInVehicel(getinItem);
+                break;
+            case 'dismount':
+                let str6 = message.content;
+                let res6 = str6.split(" ");
+                let getoutItem = res6[1];
+                function getOutVehicel(getoutItem) {
+                    switch (getoutItem) {
+                        case 'tank':
+                            if (playersVehicelIn !== 'None') {
+                                db.subtract(`${message.author.id}.health`, ItemsFile.tank.extraDefense);
+                                db.set(`${message.author.id}.vehicel`, `None`);
+                                db.add(`${message.author.id}.tank`, 1);
+                                message.channel.send(`You dismounted a tank`);
+                            }
+                            else {
+                                message.channel.send(`You are in no vehicel`);
+                            }
+                            break;
+                    }
                 }
-            }
-            getInVehicel(getinItem);
-            break;
-        case 'dismount':
-            let str6 = message.content;
-            let res6 = str6.split(" ");
-            let getoutItem = res6[1];
-            function getOutVehicel(getoutItem) {
-                switch (getoutItem) {
-                    case 'tank':
-                        if (playersVehicelIn !== 'None') {
-                            db.subtract(`${message.author.id}.health`, ItemsFile.tank.extraDefense);
-                            db.set(`${message.author.id}.vehicel`, `None`);
-                            db.add(`${message.author.id}.tank`, 1);
-                            message.channel.send(`You dismounted a tank`);
-                        }
-                        else {
-                            message.channel.send(`You are in no vehicel`);
-                        }
-                        break;
+                getOutVehicel(getoutItem);
+                break;
+            case 'map':
+                let mapEmbed = new Discord.RichEmbed()
+                    .setTitle(`Worldmap${emoji('689010860064374823')}`)
+                    .setDescription(`This showes where you are located`)
+                    .addField(`Europe${emoji('689010860500582401')}`, `Countries in Europe`, false)
+                    .addField(`${germany}`, `${emoji('689010860513034273')}`, false)
+                    .addField(`${france}`, `${emoji('689010860500189184')}`, false)
+                    .addField(`${italy}`, `${emoji('689010860248793155')}`, false)
+                    .addField(`${spain}`, `${emoji('689017156070932517')}`, false)
+                    .addField(`America${emoji('689010860517228581')}`, `States in America`, false)
+                    .addField(`${texas}`, `${emoji('689010860601114650')}`, false)
+                    .addField(`${ohio}`, `${emoji('689010860546326528')}`, false)
+                    .addField(`${michigan}`, `${emoji('689010860601114666')}`, false)
+                    .addField(`${virgina}`, `${emoji('689010860911624206')}`, false)
+                    .addField(`${hawaii}`, `${emoji('689010860513034283')}`, false)
+                    .addField(`Asia${emoji('689010860068569089')}`, `Countries in Asia`, false)
+                    .addField(`${japan}`, `${emoji('689010860638994432')}`, false)
+                    .addField(`${india}`, `${emoji('689010860529811477')}`, false)
+                    .addField(`${thailand}`, `${emoji('689017084608643107')}`, false);
+                message.channel.send(mapEmbed);
+                break;
+            case 'travel':
+                let str7 = message.content;
+                let res7 = str7.split(" ");
+                let destination = res7[1];
+                function ifExistGoTo(whereTo) {
+                    let allLocations = " germany france italy spain ohio hawaii texas michigan virgina india thailand japan";
+                    if (allLocations.includes(`${whereTo}`)) {
+                        db.set(`${message.author.id}.location`, `${whereTo}`);
+                        message.channel.send(`You traveled to ${whereTo}`);
+                    }
+                    else {
+                        message.channel.send(`This destination doesn't exist. Do ${prefix}map to see all.`);
+                    }
                 }
-            }
-            getOutVehicel(getoutItem);
-            break;
+                ifExistGoTo(destination);
+                break;
+        }
     }
 }));
 client.login(ConfigFile.config2.token);
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi9zcmMvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7QUFDQSxzQ0FBc0M7QUFDdEMsd0NBQXdDO0FBQ3hDLCtCQUErQjtBQUMvQixxQ0FBcUM7QUFDckMsK0JBQWlEO0FBU2pELE1BQU0sTUFBTSxHQUFtQixJQUFJLE9BQU8sQ0FBQyxNQUFNLEVBQUUsQ0FBQztBQUNwRCxNQUFNLE1BQU0sR0FBRyxVQUFVLENBQUMsT0FBTyxDQUFDLE1BQU0sQ0FBQztBQUV6QyxTQUFTLEtBQUssQ0FBQyxFQUFVOztJQUNyQixhQUFPLE1BQU0sQ0FBQyxNQUFNLENBQUMsR0FBRyxDQUFDLEVBQUUsQ0FBQywwQ0FBRSxRQUFRLEdBQUc7QUFDN0MsQ0FBQztBQUNELE1BQU0sQ0FBQyxFQUFFLENBQUMsT0FBTyxFQUFFLEdBQUcsRUFBRTtJQUVwQixNQUFNLENBQUMsSUFBSyxDQUFDLFdBQVcsQ0FBQyxnQkFBZ0IsRUFBRSxFQUFFLElBQUksRUFBRSxTQUFTLEVBQUUsQ0FBQyxDQUFBO0lBQy9ELElBQUksUUFBUSxHQUFHLE1BQU0sQ0FBQyxLQUFLLENBQUMsS0FBSyxFQUFFLENBQUM7SUFFcEMsS0FBSyxJQUFJLENBQUMsR0FBRyxDQUFDLEVBQUUsQ0FBQyxHQUFHLFFBQVEsQ0FBQyxNQUFNLEVBQUUsQ0FBQyxFQUFFLEVBQUU7UUFDdEMsSUFBSSxhQUFNLENBQUMsRUFBRSxDQUFDLEdBQUcsQ0FBQyxRQUFRLENBQUMsQ0FBQyxDQUFDLENBQUMsRUFBRSxDQUFDLENBQUMsRUFBRTtZQUNoQyxFQUFFLENBQUMsR0FBRyxDQUFDLFFBQVEsQ0FBQyxDQUFDLENBQUMsQ0FBQyxFQUFFLEVBQUUsRUFBRSxLQUFLLEVBQUUsRUFBRSxFQUFFLE1BQU0sRUFBRSxHQUFHLEVBQUUsUUFBUSxFQUFFLENBQUMsRUFBRSxXQUFXLEVBQUUsQ0FBQyxFQUFFLE9BQU8sRUFBRSxDQUFDLEVBQUUs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
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi9zcmMvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7QUFDQSxzQ0FBc0M7QUFDdEMsdUNBQXVDO0FBQ3ZDLCtCQUErQjtBQUMvQixxQ0FBcUM7QUFDckMsK0JBQWlEO0FBU2pELE1BQU0sTUFBTSxHQUFtQixJQUFJLE9BQU8sQ0FBQyxNQUFNLEVBQUUsQ0FBQztBQUNwRCxNQUFNLE1BQU0sR0FBRyxVQUFVLENBQUMsT0FBTyxDQUFDLE1BQU0sQ0FBQztBQUN6QyxNQUFNLElBQUksR0FBRyxJQUFJLENBQUMsS0FBSyxDQUFDLElBQUksQ0FBQyxNQUFNLEVBQUUsR0FBRyxJQUFJLENBQUMsQ0FBQTtBQUU3QyxTQUFTLEtBQUssQ0FBQyxFQUFVOztJQUNyQixhQUFPLE1BQU0sQ0FBQyxNQUFNLENBQUMsR0FBRyxDQUFDLEVBQUUsQ0FBQywwQ0FBRSxRQUFRLEdBQUc7QUFDN0MsQ0FBQztBQUNELE1BQU0sQ0FBQyxFQUFFLENBQUMsT0FBTyxFQUFFLEdBQUcsRUFBRTtJQUVwQixNQUFNLENBQUMsSUFBSyxDQUFDLFdBQVcsQ0FBQyxnQkFBZ0IsRUFBRSxFQUFFLElBQUksRUFBRSxTQUFTLEVBQUUsQ0FBQyxDQUFBO0lBQy9ELElBQUksUUFBUSxHQUFHLE1BQU0sQ0FBQyxLQUFLLENBQUMsS0FBSyxFQUFFLENBQUM7SUFFcEMsS0FBSyxJQUFJLENBQUMsR0FBRyxDQUFDLEVBQUUsQ0FBQyxHQUFHLFFBQVEsQ0FBQyxNQUFNLEVBQUUsQ0FBQyxFQUFFLEVBQUU7UUFDdEMsSUFBSSxhQUFNLENBQUMsRUFBRSxDQUFDLEdBQUcsQ0FBQyxRQUFRLENBQUMsQ0FBQyxDQUFDLENBQUMsRUFBRSxDQUFDLENBQUMsRUFBRTtZQUNoQyxFQUFFLENBQUMsR0FBRyxDQUFDLFFBQVEsQ0FBQyxDQUFDLENBQUMsQ0FBQyxFQUFFLEVBQUUsRUFBRSxLQUFLLEVBQUUsRUFBRSxFQUFF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RSxDQUFBO0tBQ3ZEO0lBQ0QsSUFBSSxlQUFlLEtBQUssTUFBTSxFQUFFO1FBQzVCLE1BQU0sR0FBRyxHQUFHLE1BQU0sR0FBRyxLQUFLLENBQUMsb0JBQW9CLENBQUMsRUFBRSxDQUFBO0tBQ3JEO0lBQ0QsSUFBSSxlQUFlLEtBQUssS0FBSyxFQUFFO1FBQzNCLEtBQUssR0FBRyxHQUFHLEtBQUssR0FBRyxLQUFLLENBQUMsb0JBQW9CLENBQUMsRUFBRSxDQUFBO0tBQ25EO0lBQ0QsSUFBSSxlQUFlLEtBQUssS0FBSyxFQUFFO1FBQzNCLEtBQUssR0FBRyxHQUFHLEtBQUssR0FBRyxLQUFLLENBQUMsb0JBQW9CLENBQUMsRUFBRSxDQUFBO0tBQ25EO0lBQ0QsSUFBSSxlQUFlLEtBQUssS0FBSyxFQUFFO1FBQzNCLEtBQUssR0FBRyxHQUFHLEtBQUssR0FBRyxLQUFLLENBQUMsb0JBQW9CLENBQUMsRUFBRSxDQUFBO0tBQ25EO0lBQ0QsSUFBSSxlQUFlLEtBQUssSUFBSSxFQUFFO1FBQzFCLElBQUksR0FBRyxHQUFHLElBQUksR0FBRyxLQUFLLENBQUMsb0JBQW9CLENBQUMsRUFBRSxDQUFBO0tBQ2pEO0lBQ0QsSUFBSSxlQUFlLEtBQUssS0FBSyxFQUFFO1FBQzNCLEtBQUssR0FBRyxHQUFHLEtBQUssR0FBRyxLQUFLLENBQUMsb0JBQW9CLENBQUMsRUFBRSxDQUFBO0tBQ25EO0lBQ0QsSUFBSSxlQUFlLEtBQUssS0FBSyxFQUFFO1FBQzNCLEtBQUssR0FBRyxHQUFHLEtBQUssR0FBRyxLQUFLLENBQUMsb0JBQW9CLENBQUMsRUFBRSxDQUFBO0tBQ25EO0lBQ0QsSUFBSSxlQUFlLEtBQUssT0FBTyxFQUFFO1FBQzdCLE9BQU8sR0FBRyxHQUFHLE9BQU8sR0FBRyxLQUFLLENBQUMsb0JBQW9CLENBQUMsRUFBRSxDQUFBO0tBQ3ZEO0lBQ0QsSUFBSSxlQUFlLEtBQUssUUFBUSxFQUFFO1FBQzlCLFFBQVEsR0FBRyxHQUFHLFFBQVEsR0FBRyxLQUFLLENBQUMsb0JBQW9CLENBQUMsRUFBRSxDQUFBO0tB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S0FBSyxDQUFDO3FCQUM3RCxRQUFRLENBQUMsR0FBRyxLQUFLLEVBQUUsRUFBRSxHQUFHLEtBQUssQ0FBQyxvQkFBb0IsQ0FBQyxFQUFFLEVBQUUsS0FBSyxDQUFDO3FCQUU3RCxRQUFRLENBQUMsVUFBVSxLQUFLLENBQUMsb0JBQW9CLENBQUMsRUFBRSxFQUFFLG1CQUFtQixFQUFFLEtBQUssQ0FBQztxQkFDN0UsUUFBUSxDQUFDLEdBQUcsS0FBSyxFQUFFLEVBQUUsR0FBRyxLQUFLLENBQUMsb0JBQW9CLENBQUMsRUFBRSxFQUFFLEtBQUssQ0FBQztxQkFDN0QsUUFBUSxDQUFDLEdBQUcsSUFBSSxFQUFFLEVBQUUsR0FBRyxLQUFLLENBQUMsb0JBQW9CLENBQUMsRUFBRSxFQUFFLEtBQUssQ0FBQztxQkFDNUQsUUFBUSxDQUFDLEdBQUcsUUFBUSxFQUFFLEVBQUUsR0FBRyxLQUFLLENBQUMsb0JBQW9CLENBQUMsRUFBRSxFQUFFLEtBQUssQ0FBQztxQkFDaEUsUUFBUSxDQUFDLEdBQUcsT0FBTyxFQUFFLEVBQUUsR0FBRyxLQUFLLENBQUMsb0JBQW9CLENBQUMsRUFBRSxFQUFFLEtBQUssQ0FBQztxQkFDL0QsUUFBUSxDQUFDLEdBQUcsTUFBTSxFQUFFLEVBQUUsR0FBRyxLQUFLLENBQUMsb0JBQW9CLENBQUMsRUFBRSxFQUFFLEtBQUssQ0FBQztxQkFFOUQsUUFBUSxDQUFDLE9BQU8sS0FBSyxDQUFDLG9CQUFvQixDQUFDLEVBQUUsRUFBRSxtQkFBbUIsRUFBRSxLQUFLLENBQUM7cUJBQzFFLFFBQVEsQ0FBQyxHQUFHLEtBQUssRUFBRSxFQUFFLEdBQUcsS0FBSyxDQUFDLG9CQUFvQixDQUFDLEVBQUUsRUFBRSxLQUFLLENBQUM7cUJBQzdELFFBQVEsQ0FBQyxHQUFHLEtBQUssRUFBRSxFQUFFLEdBQUcsS0FBSyxDQUFDLG9CQUFvQixDQUFDLEVBQUUsRUFBRSxLQUFLLENBQUM7cUJBQzdELFFBQVEsQ0FBQyxHQUFHLFFBQVEsRUFBRSxFQUFFLEdBQUcsS0FBSyxDQUFDLG9CQUFvQixDQUFDLEVBQUUsRUFBRSxLQUFLLENBQUMsQ0FBQTtnQkFDckUsT0FBTyxDQUFDLE9BQU8sQ0FBQyxJQUFJLENBQUMsUUFBUSxDQUFDLENBQUE7Z0JBQzlCLE1BQU07WUFDVixLQUFLLFFBQVE7Z0JBQ1QsSUFBSSxJQUFJLEdBQUcsT0FBTyxDQUFDLE9BQU8sQ0FBQztnQkFDM0IsSUFBSSxJQUFJLEdBQUcsSUFBSSxDQUFDLEtBQUssQ0FBQyxHQUFHLENBQUMsQ0FBQztnQkFDM0IsSUFBSSxXQUFXLEdBQUcsSUFBSSxDQUFDLENBQUMsQ0FBQyxDQUFDO2dCQUMxQixTQUFTLFdBQVcsQ0FBQyxPQUFlO29CQUNoQyxJQUFJLFlBQVksR0FBRyxxRkFBcUYsQ0FBQTtvQkFDeEcsSUFBSSxZQUFZLENBQUMsUUFBUSxDQUFDLEdBQUcsT0FBTyxFQUFFLENBQUMsRUFBRTt3QkFDckMsRUFBRSxDQUFDLEdBQUcsQ0FBQyxHQUFHLE9BQU8sQ0FBQyxNQUFNLENBQUMsRUFBRSxXQUFXLEVBQUUsR0FBRyxPQUFPLEVBQUUsQ0FBQyxDQUFBO3dCQUNyRCxPQUFPLENBQUMsT0FBTyxDQUFDLElBQUksQ0FBQyxtQkFBbUIsT0FBTyxFQUFFLENBQUMsQ0FBQTtxQkFDckQ7eUJBQU07d0JBQ0gsT0FBTyxDQUFDLE9BQU8sQ0FBQyxJQUFJLENBQUMsc0NBQXNDLE1BQU0saUJBQWlCLENBQUMsQ0FBQTtxQkFDdEY7Z0JBQ0wsQ0FBQztnQkFDRCxXQUFXLENBQUMsV0FBVyxDQUFDLENBQUM7Z0JBQ3pCLE1BQU07U0FDYjtLQUNKO0FBQ0wsQ0FBQyxDQUFBLENBQUMsQ0FBQTtBQUVGLE1BQU0sQ0FBQyxLQUFLLENBQUMsVUFBVSxDQUFDLE9BQU8sQ0FBQyxLQUFLLENBQUMsQ0FBQyJ9
