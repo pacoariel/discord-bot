@@ -1,0 +1,6 @@
+discord.js == 11.4.2
+quick.db == ^7.0.0-b22
+better-sqlite3-helper == ^2.2.1
+@types/node == ^13.9.0
+util == ^0.12.2
+
