@@ -127,15 +127,11 @@ client.on("message", async message => {
     let role_rank_9 = message.guild.roles.find(r => r.name === "CORONA_rank 🦠");
     let role_rank_5 = message.guild.roles.find(r => r.name === "Lucky_rank 🍀 .       (?!?!??!?!??!Are you OK?!?!??!?!??!)");
     let role_rank_6 = message.guild.roles.find(r => r.name === "Supreme_rank 🎖️    (!!!You are definitely MAD!!!)");
-    let role_rank_7 = message.guild.roles.find(r => r.name === "BombSquad_rank 💣");
-    let role_rank_8 = message.guild.roles.find(r => r.name === "🕦 Clock_Master_rank 🕦");
-
-
+    let role_rank_7 = message.guild.roles.find(r => r.name === "SurpremeLeader_rank");
+    let role_rank_VIP = message.guild.roles.find(r => r.name === "👑 VIP 👑");
     if (playersLettersSend > 1000) {
         let member = message.member
         member.addRole(role_rank_1).catch(console.error);
-
-
     }
     if (playersLettersSend > 10000) {
         let member = message.member
@@ -151,29 +147,29 @@ client.on("message", async message => {
         member.addRole(role_rank_4).catch(console.error);
 
     }
-    if (playersLettersSend > 1750000) {
+    if (playersLettersSend > 2500000) {
         let member = message.member
         member.addRole(role_rank_9).catch(console.error);
 
     }
-    if (playersLettersSend > 2500000) {
+    if (playersLettersSend > 5000000) {
         let member = message.member
         member.addRole(role_rank_5).catch(console.error);
 
     }
-    if (playersLettersSend > 5000000) {
+    if (playersLettersSend > 7500000) {
         let member = message.member
         member.addRole(role_rank_6).catch(console.error);
 
     }
-    if (playersLettersSend > 7500000) {
+    if (playersLettersSend > 10000000) {
         let member = message.member
         member.addRole(role_rank_7).catch(console.error);
 
     }
-    if (playersLettersSend > 10000000) {
+    if (playersLettersSend > 37500000) {
         let member = message.member
-        member.addRole(role_rank_8).catch(console.error);
+        member.addRole(role_rank_VIP).catch(console.error);
 
     }
     if (message.author?.bot) { return };
