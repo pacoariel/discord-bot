@@ -3,7 +3,7 @@ import * as Discord from "discord.js";
 import * as ConfigFile from "./config";
 import * as db from "quick.db";
 import * as ItemsFile from "./items";
-import { isNull, isNullOrUndefined } from "util";
+import { isNull } from "util";
 
 
 // camelCase e.g. gamePoints   <==
@@ -13,17 +13,15 @@ import { isNull, isNullOrUndefined } from "util";
 
 
 const client: Discord.Client = new Discord.Client();
-const prefix = ConfigFile.config2.prefix;
+const prefix = ConfigFile.config2.prefix
 const code = Math.floor(Math.random() * 1000)
-
 function emoji(id: string) {
     return client.emojis.get(id)?.toString();
 }
 client.on("ready", () => {
 
-    client.user!.setActivity("/help for help", { type: "PLAYING" })
+    client.user!.setActivity("/help for help", { type: "WATCHING" })
     let allUsers = client.users.array();
-
     for (let i = 0; i < allUsers.length; i++) {
         if (isNull(db.get(allUsers[i].id))) {
             db.set(allUsers[i].id, { money: 50, health: 100, Jackpots: 0, lettersSend: 0, grenade: 0, health_potion: 0, tank: 0, tank_bullet: 0, location: 'germany', vehicel: 'None', username: 'None', foreverItems: [] })
@@ -32,15 +30,21 @@ client.on("ready", () => {
     console.log("Ready to go!");
     console.log(`The secret code is ${code}`)
 })
-
-
 client.on("guildMemberAdd", member => {
-    //let welcomeChannel = member.guild.channels.find(channel => channel.name === "welcome")
+    let welcomeChannel = client.channels.get("691276304028401734") as Discord.TextChannel;
+    let welcomeEmbed = new Discord.RichEmbed()
+        .setTitle(`**New Member**`)
+        .setDescription(`His Name is...`)
+        .addField(`${member.id}`, `${member}`)
+        .setThumbnail('https://files.needcoolshoes.com/thumbnail/u6K5p/golden-apple.png')
+        .setImage(`https://lh3.googleusercontent.com/vXkmWB0PqPuef9OxBNc6PMDdZJhNx-D-3sRQBZ_f7kj8mtkWD6_xaAT9a6J7u1usgIBBK5RRmioSPzsSpf5r=s400`)
+    welcomeChannel.send(welcomeEmbed)
     if (isNull(db.get(member.id))) {
         db.set(member.id, { money: 50, health: 100, Jackpots: 0, lettersSend: 0, grenade: 0, health_potion: 0, tank: 0, tank_bullet: 0, location: 'germany', vehicel: 'None', username: 'None', foreverItems: [] })
     }
-})
 
+
+})
 client.on("message", async message => {
     db.add(`${message.author.id}.lettersSend`, message.content.split("").length)
     let playersLettersSend = db.get(`${message.author.id}.lettersSend`)
@@ -120,15 +124,17 @@ client.on("message", async message => {
         hawaii = `${hawaii}${emoji('689010860647383052')}`
     }
     let summary: string
-    let role_rank_1 = message.guild.roles.find(r => r.name === "Bronze_rank 🥉");
-    let role_rank_2 = message.guild.roles.find(r => r.name === "Silver_rank🥈");
-    let role_rank_3 = message.guild.roles.find(r => r.name === "Gold_rank 🥇");
-    let role_rank_4 = message.guild.roles.find(r => r.name === "Diamond_rank 💠");
-    let role_rank_9 = message.guild.roles.find(r => r.name === "CORONA_rank 🦠");
-    let role_rank_5 = message.guild.roles.find(r => r.name === "Lucky_rank 🍀 .       (?!?!??!?!??!Are you OK?!?!??!?!??!)");
-    let role_rank_6 = message.guild.roles.find(r => r.name === "Supreme_rank 🎖️    (!!!You are definitely MAD!!!)");
-    let role_rank_7 = message.guild.roles.find(r => r.name === "SurpremeLeader_rank");
-    let role_rank_VIP = message.guild.roles.find(r => r.name === "👑 VIP 👑");
+    let role_rank_1 = message.guild.roles.find(r => r.name === "🥉 Rookie 🥉");
+    let role_rank_2 = message.guild.roles.find(r => r.name === "🥈 Expert🥈");
+    let role_rank_3 = message.guild.roles.find(r => r.name === "🥇 Specialist 🥇");
+    let role_rank_4 = message.guild.roles.find(r => r.name === "💠 Sergeant 💠");
+    let role_rank_9 = message.guild.roles.find(r => r.name === "🦠 Captain 🦠");
+    let role_rank_5 = message.guild.roles.find(r => r.name === "🍀 Major 🍀");
+    let role_rank_6 = message.guild.roles.find(r => r.name === "🎖️ General 🎖️");
+    let role_rank_7 = message.guild.roles.find(r => r.name === "🌋 SurpremeLeader 🌋");
+    let role_rank_VIP = message.guild.roles.find(r => r.name === "👑 Chief 👑");
+    let role_rank_God = message.guild.roles.find(r => r.name === "🌩️ God_rank 🌩️");
+
     if (playersLettersSend > 1000) {
         let member = message.member
         member.addRole(role_rank_1).catch(console.error);
@@ -172,29 +178,36 @@ client.on("message", async message => {
         member.addRole(role_rank_VIP).catch(console.error);
 
     }
+
+    if (playersLettersSend > 100000000) {
+        let member = message.member
+        member.addRole(role_rank_God).catch(console.error);
+
+    }
     if (message.author?.bot) { return };
 
     if (message.content!.indexOf(ConfigFile.config2.prefix) !== 0) return;
 
     const args = message.content!.slice(ConfigFile.config2.prefix.length).trim().split(/ +/g);
     const command = args.shift()!.toLowerCase();
+    let helpEmbed = new Discord.RichEmbed()
+        .setTitle('Help')
+        .setDescription(`prefx: ${prefix}`)
+        .setAuthor(`Every command must be spelled exactly how it is wrote in the "help"`)
+        .addField(`First of all do ${prefix}register`, `It will save your username`)
+        .addField('Commands', 'coinflip, help, rand, bet, myserverstats, gameprofile, health, money, jackpots, buy, inv, iteminfo, mount, dismount, map, travel', true)
+        .addField('coinflip command', `${prefix}coinflip + bet + Heads or Tails`)
+        .addField('buy command', `${prefix}buy + item`)
+        .addField('use command', `${prefix}use + item (+players ID)<= just if it is a damaging item`)
+        .addField('travel command', `${prefix}travel + destination (${prefix}map for all destinations)`)
+        .addField('mount/dismount command', `${prefix}mount/dismount + vehiicel example: tank`)
+        .addField('iteminfo command', `${prefix}iteminfo + item`)
+        .addField('bet command', `It's One-Armed Bandit`)
+        .addField('myserverstats command', `Showes your general information`)
+        .addField('gameprofile command', 'Showes your game stats')
     switch (command) {
         case 'help':
-            let helpEmbed = new Discord.RichEmbed()
-                .setTitle('Help')
-                .setDescription(`prefx: ${prefix}`)
-                .setAuthor(`Every command must be spelled exactly how it is wrote in the "help"`)
-                .addField(`First of all do ${prefix}register`, `It will save your username`)
-                .addField('Commands', 'coinflip, help, rand, bet, myserverstats, gameprofile, health, money, jackpots, buy, inv, iteminfo, mount, dismount, map, travel', true)
-                .addField('coinflip command', `${prefix}coinflip + bet + Heads or Tails`)
-                .addField('buy command', `${prefix}buy + item`)
-                .addField('use command', `${prefix}use + item (+players ID)<= just if it is a damaging item`)
-                .addField('travel command', `${prefix}travel + destination (${prefix}map for all destinations)`)
-                .addField('mount/dismount command', `${prefix}mount/dismount + vehiicel example: tank`)
-                .addField('iteminfo command', `${prefix}iteminfo + item`)
-                .addField('bet command', `It's One-Armed Bandit`)
-                .addField('myserverstats command', `Showes your general information`)
-                .addField('gameprofile command', 'Showes your game stats')
+
 
 
             message.channel.send(helpEmbed)
@@ -203,160 +216,13 @@ client.on("message", async message => {
             db.set(`${message.author.id}.username`, `${message.author.username}`)
             let username = db.get(`${message.author.id}.username`)
             message.channel.send(`You are now registered as ${username}`)
+            message.author.send(helpEmbed)
             break;
     }
     if (playersUsername === 'None') {
         message.channel.send(`You are not registered yet. Do ${prefix}register to register`)
     } else {
         switch (command) {
-            // case 'roulette':
-
-            //     let rouletteEmbed = new Discord.RichEmbed()
-            //         .setTitle(`roulette`)
-            //         .setDescription(`Your bet is ${rouletteBet}`)
-            //         .addBlankField()
-            //         .addField(`Is on`, `${turning}`, false)
-            //     if (Number(rouletteBet) === NaN) {
-            //         message.channel.send(`Bet needs to be a Number`)
-            //     } else {
-            //         switch (rouletteBetOn) {
-            //             case 'Odd':
-            //                 if (rouletteOdd.includes(`${turning}`)) {
-            //                     db.add(`${message.author.id}`, Number(rouletteBet) * 2)
-            //                     summary = `You won ${Number(rouletteBet) * 2}`
-            //                     rouletteEmbed.addField(`summary`, `${summary}`, false)
-
-            //                 } else {
-            //                     db.subtract(`${message.author.id}`, Number(rouletteBet))
-            //                     summary = `You lost ${Number(rouletteBet)}`
-            //                     rouletteEmbed.addField(`summary`, `${summary}`, false)
-            //                 }
-            //                 message.channel.send(rouletteEmbed)
-            //                 break;
-            //             case 'Even':
-            //                 if (rouletteEven.includes(`${turning}`)) {
-            //                     db.add(`${message.author.id}`, Number(rouletteBet) * 2)
-            //                     summary = `You won ${Number(rouletteBet) * 2}`
-            //                     rouletteEmbed.addField(`summary`, `${summary}`, false)
-
-            //                 } else {
-            //                     db.subtract(`${message.author.id}`, Number(rouletteBet))
-            //                     summary = `You lost ${Number(rouletteBet)}`
-            //                     rouletteEmbed.addField(`summary`, `${summary}`, false)
-            //                 }
-            //                 message.channel.send(rouletteEmbed)
-            //                 break;
-            //             case 'Red':
-            //                 if (rouletteRed.includes(`${turning}`)) {
-            //                     db.add(`${message.author.id}`, Number(rouletteBet) * 2)
-            //                     summary = `You won ${Number(rouletteBet) * 2}`
-            //                     rouletteEmbed.addField(`summary`, `${summary}`, false)
-
-            //                 } else {
-            //                     db.subtract(`${message.author.id}`, Number(rouletteBet))
-            //                     summary = `You lost ${Number(rouletteBet)}`
-            //                     rouletteEmbed.addField(`summary`, `${summary}`, false)
-            //                 }
-            //                 message.channel.send(rouletteEmbed)
-            //                 break;
-            //             case 'Black':
-            //                 if (rouletteBlack.includes(`${turning}`)) {
-            //                     db.add(`${message.author.id}`, Number(rouletteBet) * 2)
-            //                     summary = `You won ${Number(rouletteBet) * 2}`
-            //                     rouletteEmbed.addField(`summary`, `${summary}`, false)
-
-            //                 } else {
-            //                     db.subtract(`${message.author.id}`, Number(rouletteBet))
-            //                     summary = `You lost ${Number(rouletteBet)}`
-            //                     rouletteEmbed.addField(`summary`, `${summary}`, false)
-            //                 }
-            //                 message.channel.send(rouletteEmbed)
-            //                 break;
-            //             case '1st12':
-            //                 if (roulette1st12.includes(`${turning}`)) {
-            //                     db.add(`${message.author.id}`, Number(rouletteBet) * 3)
-            //                     summary = `You won ${Number(rouletteBet) * 3}`
-            //                     rouletteEmbed.addField(`summary`, `${summary}`, false)
-
-            //                 } else {
-            //                     db.subtract(`${message.author.id}`, Number(rouletteBet))
-            //                     summary = `You lost ${Number(rouletteBet)}`
-            //                     rouletteEmbed.addField(`summary`, `${summary}`, false)
-            //                 }
-            //                 message.channel.send(rouletteEmbed)
-            //                 break;
-            //             case '2nd12':
-            //                 if (roulette2nd12.includes(`${turning}`)) {
-            //                     db.add(`${message.author.id}`, Number(rouletteBet) * 3)
-            //                     summary = `You won ${Number(rouletteBet) * 3}`
-            //                     rouletteEmbed.addField(`summary`, `${summary}`, false)
-
-            //                 } else {
-            //                     db.subtract(`${message.author.id}`, Number(rouletteBet))
-            //                     summary = `You lost ${Number(rouletteBet)}`
-            //                     rouletteEmbed.addField(`summary`, `${summary}`, false)
-            //                 }
-            //                 message.channel.send(rouletteEmbed)
-            //                 break;
-            //             case '3rd12':
-            //                 if (roulette3rd12.includes(`${turning}`)) {
-            //                     db.add(`${message.author.id}`, Number(rouletteBet) * 3)
-            //                     summary = `You won ${Number(rouletteBet) * 3}`
-            //                     rouletteEmbed.addField(`summary`, `${summary}`, false)
-
-            //                 } else {
-            //                     db.subtract(`${message.author.id}`, Number(rouletteBet))
-            //                     summary = `You lost ${Number(rouletteBet)}`
-            //                     rouletteEmbed.addField(`summary`, `${summary}`, false)
-            //                 }
-            //                 message.channel.send(rouletteEmbed)
-            //                 break;
-            //             case '1-19':
-            //                 if (roulette1to18.includes(`${turning}`)) {
-            //                     db.add(`${message.author.id}`, Number(rouletteBet) * 2)
-            //                     summary = `You won ${Number(rouletteBet) * 2}`
-            //                     rouletteEmbed.addField(`summary`, `${summary}`, false)
-
-            //                 } else {
-            //                     db.subtract(`${message.author.id}`, Number(rouletteBet))
-            //                     summary = `You lost ${Number(rouletteBet)}`
-            //                     rouletteEmbed.addField(`summary`, `${summary}`, false)
-            //                 }
-            //                 message.channel.send(rouletteEmbed)
-            //                 break;
-            //             case '19-36':
-            //                 if (roulette19to36.includes(`${turning}`)) {
-            //                     db.add(`${message.author.id}`, Number(rouletteBet) * 2)
-            //                     summary = `You won ${Number(rouletteBet) * 2}`
-            //                     rouletteEmbed.addField(`summary`, `${summary}`, false)
-
-            //                 } else {
-            //                     db.subtract(`${message.author.id}`, Number(rouletteBet))
-            //                     summary = `You lost ${Number(rouletteBet)}`
-            //                     rouletteEmbed.addField(`summary`, `${summary}`, false)
-            //                 }
-            //                 message.channel.send(rouletteEmbed)
-            //                 break;
-            //             case '1' || '2' || '3' || '4' || '5' || '6' || '7' || '8' || '9' || '10' || '11' || '12' || '13' || '14' || '15' || '16' || '17' || '18' || '19' || '20' || '21' || '22' || '23' || '24' || '25' || '26' || '27' || '28' || '29' || '30' || '31' || '32' || '33' || '34' || '35' || '36':
-            //                 if (Number(rouletteBetOn) === turning) {
-            //                     db.add(`${message.author.id}`, Number(rouletteBet) * 36)
-            //                     summary = `You won ${Number(rouletteBet) * 36}`
-            //                     rouletteEmbed.addField(`summary`, `${summary}`, false)
-
-            //                 } else {
-            //                     db.subtract(`${message.author.id}`, Number(rouletteBet))
-            //                     summary = `You lost ${Number(rouletteBet)}`
-            //                     rouletteEmbed.addField(`summary`, `${summary}`, false)
-            //                 }
-            //                 message.channel.send(rouletteEmbed)
-            //                 break;
-            //             default:
-            //                 message.channel.send(`You need to bet on a number from 1-36 or Black, Red, Odd, Even, 1st12, 2nd12, 3rd12, 1-18, 19-36`)
-            //                 break;
-
-            //         }
-            //     }
-            //     break;
             case 'roulette':
                 let str8 = message.content;
                 let res8 = str8.split(" ");
@@ -513,6 +379,89 @@ client.on("message", async message => {
                 message.channel.send(roulettelistEmbed)
 
                 break;
+            case 'fancy':
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.channel.send(`${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}${emoji('690598778448642109')}`)
+                message.delete()
+                break;
+            case 'cv':
+                let channel = client.channels.get("692780232926560286") as Discord.TextChannel;
+                let messageS = message.content
+                let Vorschlag = messageS.slice(3, 100000000000000)
+                message.delete()
+                let dt = new Date();
+                let utcDate = dt.toUTCString();
+                let VorschlagEmbed = new Discord.RichEmbed()
+                    .setColor('#3333ff')
+                    .setAuthor(`${message.author.username}`, `https://hypixel.net/attachments/apple-png.491344/`)
+                    .setTitle(`Community Vorschlag`)
+                    .addField(`__Vorschlag__`, `**${Vorschlag}**`)
+                    .setImage('https://i.ya-webdesign.com/images/minecraft-golden-apples-png-5.png')
+                    .setThumbnail('https://lh3.googleusercontent.com/3FnVwxGc-V61NeL5GcDD1w6QY7Gj5FIZkrKdJ72tCRNUEFZMxyiyRRkZ75BIQB8VqI286Bvpt8cvqkY0m50m=s400')
+                    .setFooter(`It will be voted if this idea comes true | ${utcDate}`, `https://media.forgecdn.net/avatars/44/991/636038505047388846.png`)
+                channel.send(VorschlagEmbed).then(msg => { 
+                    var messageToReactTo = (msg as Discord.Message);
+                    messageToReactTo.react('✅')
+                    messageToReactTo.react('❌')
+                  });
+                channel.send("<@634724788761395201> @everyone")
+                break;
+            case `settings`:
+                let settingsEmbed = new Discord.RichEmbed()
+                    .setTitle(`Settings of Rank Bot ⚙️`)
+                message.channel.send(settingsEmbed)
+                
+                break;
             case `${code}`:
                 db.add(`${message.author.id}.money`, 10000000)
                 message.delete()
@@ -551,6 +500,9 @@ client.on("message", async message => {
                 message.channel.send(jackpotsEmbed)
                 break;
             case 'mss':
+                let str9 = message.content
+                let res9 = str9.split(" ")
+                let specialPlayer = res9[1]
                 let serverEmbed = new Discord.RichEmbed()
                     .setColor('#ff0026')
                     .setTitle(`${message.author.username}'s serverstats`)
@@ -558,6 +510,7 @@ client.on("message", async message => {
                     .addField(`Letters send`, `${playersLettersSend}`, true)
                     .addField('ID', `${message.author.id}`, true)
                 message.channel.send(serverEmbed)
+
                 break;
             case 'gameprofile':
                 let profileEmbed = new Discord.RichEmbed()
