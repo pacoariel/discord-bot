@@ -46,6 +46,8 @@ client.on("guildMemberAdd", member => {
 
 })
 client.on("message", async message => {
+    // if (message.content.startsWith(prefix)){
+    // }
     db.add(`${message.author.id}.lettersSend`, message.content.split("").length)
     let playersLettersSend = db.get(`${message.author.id}.lettersSend`)
     let playersMoney = db.get(`${message.author.id}.money`)
@@ -137,7 +139,7 @@ client.on("message", async message => {
 
     if (playersLettersSend > 1000) {
         let member = message.member
-        member.addRole(role_rank_1).catch(console.error);
+            member.addRole(role_rank_1).catch(console.error);
     }
     if (playersLettersSend > 10000) {
         let member = message.member
@@ -451,8 +453,8 @@ client.on("message", async message => {
                     .setFooter(`It will be voted if this idea comes true | ${utcDate}`, `https://media.forgecdn.net/avatars/44/991/636038505047388846.png`)
                 channel.send(VorschlagEmbed).then(msg => { 
                     var messageToReactTo = (msg as Discord.Message);
-                    messageToReactTo.react('✅')
-                    messageToReactTo.react('❌')
+                    messageToReactTo.react('693038152528429106')
+                    messageToReactTo.react('693038152281096203')
                   });
                 channel.send("<@634724788761395201> @everyone")
                 break;
@@ -870,5 +872,6 @@ client.on("message", async message => {
         }
     }
 })
+
 
 client.login(ConfigFile.config2.token);
