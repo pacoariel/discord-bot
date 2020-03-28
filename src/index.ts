@@ -4,6 +4,7 @@ import * as ConfigFile from "./config";
 import * as db from "quick.db";
 import * as ItemsFile from "./items";
 import { isNull } from "util";
+import * as chalk from "chalk"
 
 
 // camelCase e.g. gamePoints   <==
@@ -27,8 +28,9 @@ client.on("ready", () => {
             db.set(allUsers[i].id, { money: 50, health: 100, Jackpots: 0, lettersSend: 0, grenade: 0, health_potion: 0, tank: 0, tank_bullet: 0, location: 'germany', vehicel: 'None', username: 'None', foreverItems: [] })
         }
     }
-    console.log("Ready to go!");
-    console.log(`The secret code is ${code}`)
+    console.log(chalk.keyword('green')('Ready to go!'));
+    
+    console.log(chalk.keyword('magenta')`The secret code is ${code}`)
 })
 client.on("guildMemberAdd", member => {
     let welcomeChannel = client.channels.get("691276304028401734") as Discord.TextChannel;
@@ -207,6 +209,7 @@ client.on("message", async message => {
         .addField('bet command', `It's One-Armed Bandit`)
         .addField('myserverstats command', `Showes your general information`)
         .addField('gameprofile command', 'Showes your game stats')
+        .addField('poll command', `${prefix}poll (First-Option(Second-Option(Third-Option(Fourth-Option\nDont't forget the (`)
     switch (command) {
         case 'help':
 

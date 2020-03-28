@@ -12,11 +12,9 @@
     "@discordjs/opus": "^0.1.0",
     "@types/node": "^13.9.0",
     "better-sqlite3-helper": "^2.2.1",
+    "chalk": "^3.0.0",
     "discord.js": "11.4.2",
-    "ffmpeg": "0.0.4",
-    "ffmpeg-static": "^4.0.1",
     "libsodium-wrappers": "^0.7.6",
-    "opusscript": "0.0.7",
     "quick.db": "^7.0.0-b22",
     "typescript": "^3.8.3",
     "util": "^0.12.2"
