@@ -16,6 +16,8 @@ import * as chalk from "chalk"
 const client: Discord.Client = new Discord.Client();
 const prefix = ConfigFile.config2.prefix
 const code = Math.floor(Math.random() * 1000)
+let dt = new Date();
+let utcDate = dt.toUTCString();
 function emoji(id: string) {
     return client.emojis.get(id)?.toString();
 }
@@ -444,8 +446,7 @@ client.on("message", async message => {
                 let messageS = message.content
                 let Vorschlag = messageS.slice(3, 100000000000000)
                 message.delete()
-                let dt = new Date();
-                let utcDate = dt.toUTCString();
+                
                 let VorschlagEmbed = new Discord.RichEmbed()
                     .setColor('#3333ff')
                     .setAuthor(`${message.author.username}`, `https://hypixel.net/attachments/apple-png.491344/`)
@@ -465,11 +466,41 @@ client.on("message", async message => {
                   });
                 channel.send("<@634724788761395201> @everyone")
                 break;
+
+                case 'poll':
+                    let messageSplit = message.content
+                    let restin = messageSplit.split("(")
+                    let Title = restin[1]
+                    let o1 = restin[2]
+                    let o2 = restin[3]
+                    let o3 = restin[4]
+                    let o4 = restin[5]
+                    message.delete()
+                    let pollEmbed = new Discord.RichEmbed()
+                        .setColor('#3333ff')
+                        .setAuthor(`${message.author.username}`, `https://cdn.discordapp.com/emojis/693466418162958456.png?v=1`)
+                        .setTitle(`Vote`)
+                        .setDescription(`**__${Title}__**\n🇦 ${o1}\n🇧 ${o2}\n🇨 ${o3}\n🇩 ${o4}`)
+                        .addField('`',`\n${emoji('692712407885283398')}${emoji('692712407507796010')}${emoji('693466387481624576')}${emoji('693466418141986836')}${emoji('693810476697518081')}`)
+                        .setThumbnail('https://lh3.googleusercontent.com/fyeHmp0-7Hn_xnYpNJmCZi8VsioJK-BKWfOxIOvta0EnWdvhkbzubwAK7gOjniX3ClQr8q0ABvLwGDTqqlR5kb0')
+                        .setFooter(`Vote | ${utcDate}`, `https://cdn.discordapp.com/emojis/693466418154569818.png?v=1`)
+                    message.channel.send(pollEmbed).then(async msg => { 
+                        var messageToReactTo = (msg as Discord.Message);
+                    try {
+                        await messageToReactTo.react('🇦')
+                        await messageToReactTo.react('🇧')
+                        await messageToReactTo.react('🇨')
+                        await messageToReactTo.react('🇩')
+                    } catch (error) {
+                        console.log(error)
+                    }
+                      });
+                    message.channel.send("@everyone")
+                    break;
             case `settings`:
                 let settingsEmbed = new Discord.RichEmbed()
                     .setTitle(`Settings of Rank Bot ⚙️`)
                 message.channel.send(settingsEmbed)
-                
                 break;
             case `${code}`:
                 db.add(`${message.author.id}.money`, 10000000)
@@ -839,26 +870,9 @@ client.on("message", async message => {
                 break;
             case 'map':
                 let mapEmbed = new Discord.RichEmbed()
-                    .setTitle(`Worldmap${emoji('689010860064374823')}`)
+                    .setTitle(`Worldmap`)
                     .setDescription(`This showes where you are located`)
-                    //Europe
-                    .addField(`Europe${emoji('689010860500582401')}`, `Countries in Europe`, false)
-                    .addField(`${germany}`, `${emoji('689010860513034273')}`, false)
-                    .addField(`${france}`, `${emoji('689010860500189184')}`, false)
-                    .addField(`${italy}`, `${emoji('689010860248793155')}`, false)
-                    .addField(`${spain}`, `${emoji('689017156070932517')}`, false)
-                    //America 
-                    .addField(`America${emoji('689010860517228581')}`, `States in America`, false)
-                    .addField(`${texas}`, `${emoji('689010860601114650')}`, false)
-                    .addField(`${ohio}`, `${emoji('689010860546326528')}`, false)
-                    .addField(`${michigan}`, `${emoji('689010860601114666')}`, false)
-                    .addField(`${virgina}`, `${emoji('689010860911624206')}`, false)
-                    .addField(`${hawaii}`, `${emoji('689010860513034283')}`, false)
-                    //Asia
-                    .addField(`Asia${emoji('689010860068569089')}`, `Countries in Asia`, false)
-                    .addField(`${japan}`, `${emoji('689010860638994432')}`, false)
-                    .addField(`${india}`, `${emoji('689010860529811477')}`, false)
-                    .addField(`${thailand}`, `${emoji('689017084608643107')}`, false)
+                    .addField(`All` , `Europe:\n${germany}\n${france}\n${italy}\n${spain}\nAmerica:\n${texas}\n${ohio}\n${michigan}\n${virgina}\n${hawaii}\nAsia:\n${japan}\n${india}\n${thailand}`, false)
                 message.channel.send(mapEmbed)
                 break;
             case 'travel':
