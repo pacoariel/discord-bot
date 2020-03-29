@@ -454,10 +454,14 @@ client.on("message", async message => {
                     .setImage('https://i.ya-webdesign.com/images/minecraft-golden-apples-png-5.png')
                     .setThumbnail('https://lh3.googleusercontent.com/3FnVwxGc-V61NeL5GcDD1w6QY7Gj5FIZkrKdJ72tCRNUEFZMxyiyRRkZ75BIQB8VqI286Bvpt8cvqkY0m50m=s400')
                     .setFooter(`It will be voted if this idea comes true | ${utcDate}`, `https://media.forgecdn.net/avatars/44/991/636038505047388846.png`)
-                channel.send(VorschlagEmbed).then(msg => { 
+                channel.send(VorschlagEmbed).then(async msg => { 
                     var messageToReactTo = (msg as Discord.Message);
-                    messageToReactTo.react('693038152528429106')
-                    messageToReactTo.react('693038152281096203')
+                try {
+                    await messageToReactTo.react('693038152528429106')
+                    await messageToReactTo.react('693038152281096203')
+                } catch (error) {
+                    console.log(error)
+                }
                   });
                 channel.send("<@634724788761395201> @everyone")
                 break;
