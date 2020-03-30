@@ -211,7 +211,7 @@ client.on("message", async message => {
         .addField('bet command', `It's One-Armed Bandit`)
         .addField('myserverstats command', `Showes your general information`)
         .addField('gameprofile command', 'Showes your game stats')
-        .addField('poll command', `${prefix}poll (First-Option(Second-Option(Third-Option(Fourth-Option\nDont't forget the (`)
+        .addField('poll command', `${prefix}poll (Title(First-Option(Second-Option(Third-Option(Fourth-Option\nDont't forget the (`)
     switch (command) {
         case 'help':
 
@@ -220,10 +220,13 @@ client.on("message", async message => {
             message.channel.send(helpEmbed)
             break;
         case 'register':
+            let role_rank_registered = message.guild.roles.find(r => r.name === "Registered");
             db.set(`${message.author.id}.username`, `${message.author.username}`)
             let username = db.get(`${message.author.id}.username`)
             message.channel.send(`You are now registered as ${username}`)
             message.author.send(helpEmbed)
+            let member = message.member
+            member.addRole(role_rank_registered).catch(console.error);
             break;
     }
     if (playersUsername === 'None') {
