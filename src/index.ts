@@ -502,7 +502,8 @@ client.on("message", async message => {
                     break;
             case `settings`:
                 let settingsEmbed = new Discord.RichEmbed()
-                    .setTitle(`Settings of Rank Bot ⚙️`)
+                    .setTitle(`Settings of ${message.author.username} ⚙️`)
+                    .setDescription(`<<This feature isn't coded yet>>`)
                 message.channel.send(settingsEmbed)
                 break;
             case `${code}`:
@@ -543,15 +544,15 @@ client.on("message", async message => {
                 message.channel.send(jackpotsEmbed)
                 break;
             case 'mss':
-                let str9 = message.content
-                let res9 = str9.split(" ")
-                let specialPlayer = res9[1]
+                let member = message.member
+                let JoinedAt = member.joinedAt.toDateString()
                 let serverEmbed = new Discord.RichEmbed()
                     .setColor('#ff0026')
                     .setTitle(`${message.author.username}'s serverstats`)
                     .setDescription(`These are your general Server stats`)
                     .addField(`Letters send`, `${playersLettersSend}`, true)
                     .addField('ID', `${message.author.id}`, true)
+                    .addField(`Joined`, `${JoinedAt}` , true)
                 message.channel.send(serverEmbed)
 
                 break;
