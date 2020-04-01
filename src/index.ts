@@ -31,7 +31,7 @@ client.on("ready", () => {
         }
     }
     console.log(chalk.keyword('green')('Ready to go!'));
-    
+
     console.log(chalk.keyword('magenta')`The secret code is ${code}`)
 })
 client.on("guildMemberAdd", member => {
@@ -50,8 +50,6 @@ client.on("guildMemberAdd", member => {
 
 })
 client.on("message", async message => {
-    // if (message.content.startsWith(prefix)){
-    // }
     db.add(`${message.author.id}.lettersSend`, message.content.split("").length)
     let playersLettersSend = db.get(`${message.author.id}.lettersSend`)
     let playersMoney = db.get(`${message.author.id}.money`)
@@ -78,21 +76,13 @@ client.on("message", async message => {
     let india = 'india'
     let rouletteOdd = "1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35"
     let rouletteEven = "2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36"
-
     let rouletteBlack = "2 4 6 8 10 11 13 15 17 20 22 24 26 28 29 31 33 35"
-
     let rouletteRed = "1 3 5 7 9 12 14 16 18 19 21 23 25 27 30 32 34 36 "
-
     let roulette1to18 = "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18"
-
     let roulette19to36 = "19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36"
-
     let roulette1st12 = "1 2 3 4 5 6 7 8 9 10 11 12"
-
     let roulette2nd12 = "13 14 15 16 17 18 19 20 21 22 24"
-
     let roulette3rd12 = "25 26 27 28 29 30 31 32 33 34 35 36"
-
     if (playersLocation === germany) {
         germany = `${germany}${emoji('689010860647383052')}`
     }
@@ -140,55 +130,97 @@ client.on("message", async message => {
     let role_rank_7 = message.guild.roles.find(r => r.name === "🌋 SurpremeLeader 🌋");
     let role_rank_VIP = message.guild.roles.find(r => r.name === "👑 Chief 👑");
     let role_rank_God = message.guild.roles.find(r => r.name === "🌩️ God_rank 🌩️");
-
+    let member = message.member
+    function sendRankUp(OldRank: any, NewRank: any) {
+        let rankUpEmbed = new Discord.RichEmbed()
+            .setTitle(`${message.author.username} just ranked up`)
+            .setThumbnail(message.author.avatarURL)
+            .setDescription(`${OldRank} => ${NewRank}`)
+        let channel = client.channels.get("694940476192850030") as Discord.TextChannel;
+        channel.send(rankUpEmbed)
+        channel.send(`<@${member.id}>`)
+    }
     if (playersLettersSend > 1000) {
         let member = message.member
+        if (message.member.roles.has('690513447116341278')) {
+        } else {
+
             member.addRole(role_rank_1).catch(console.error);
+            sendRankUp(`everyone`, role_rank_1.name)
+        }
     }
     if (playersLettersSend > 10000) {
         let member = message.member
-        member.addRole(role_rank_2).catch(console.error);
+        if (message.member.roles.has('690513552938762251')) {
+        } else {
+            member.addRole(role_rank_2).catch(console.error);
+            sendRankUp(role_rank_1.name, role_rank_2.name)
+        }
     }
     if (playersLettersSend > 500000) {
         let member = message.member
-        member.addRole(role_rank_3).catch(console.error);
-
+        if (message.member.roles.has('690513579840897094')) {
+        } else {
+            member.addRole(role_rank_3).catch(console.error);
+            sendRankUp(role_rank_2.name, role_rank_3.name)
+        }
     }
     if (playersLettersSend > 1000000) {
         let member = message.member
-        member.addRole(role_rank_4).catch(console.error);
-
+        if (message.member.roles.has('690592064315850753')) {
+        } else {
+            member.addRole(role_rank_4).catch(console.error);
+            sendRankUp(role_rank_3.name, role_rank_4.name)
+        }
     }
     if (playersLettersSend > 2500000) {
         let member = message.member
-        member.addRole(role_rank_9).catch(console.error);
-
+        if (message.member.roles.has('690833362159665162')) {
+        } else {
+            member.addRole(role_rank_9).catch(console.error);
+            sendRankUp(role_rank_4.name, role_rank_9.name)
+        }
     }
     if (playersLettersSend > 5000000) {
         let member = message.member
-        member.addRole(role_rank_5).catch(console.error);
-
+        if (message.member.roles.has('690593888624443483')) {
+        } else {
+            member.addRole(role_rank_5).catch(console.error);
+            sendRankUp(role_rank_9.name, role_rank_5.name)
+        }
     }
     if (playersLettersSend > 7500000) {
         let member = message.member
-        member.addRole(role_rank_6).catch(console.error);
-
+        if (message.member.roles.has('690594298625917070')) {
+        } else {
+            member.addRole(role_rank_6).catch(console.error);
+            sendRankUp(role_rank_5.name, role_rank_6.name)
+        }
     }
     if (playersLettersSend > 10000000) {
         let member = message.member
-        member.addRole(role_rank_7).catch(console.error);
-
+        if (message.member.roles.has('690603618880979046')) {
+        } else {
+            member.addRole(role_rank_7).catch(console.error);
+            sendRankUp(role_rank_6.name, role_rank_7.name)
+        }
     }
     if (playersLettersSend > 37500000) {
         let member = message.member
-        member.addRole(role_rank_VIP).catch(console.error);
-
+        if (message.member.roles.has('679344130765226039')) {
+        } else {
+            member.addRole(role_rank_VIP).catch(console.error);
+            sendRankUp(role_rank_7.name, role_rank_VIP.name)
+        }
     }
 
     if (playersLettersSend > 100000000) {
         let member = message.member
-        member.addRole(role_rank_God).catch(console.error);
-
+        if (message.member.roles.has('690941105042358323')) {
+        } else {
+            member.addRole(role_rank_God).catch(console.error);
+            sendRankUp(role_rank_VIP.name, role_rank_God.name)
+        }
     }
     if (message.author?.bot) { return };
 
@@ -201,7 +233,7 @@ client.on("message", async message => {
         .setDescription(`prefx: ${prefix}`)
         .setAuthor(`Every command must be spelled exactly how it is wrote in the "help"`)
         .addField(`First of all do ${prefix}register`, `It will save your username`)
-        .addField('Commands', 'coinflip, help, rand, bet, myserverstats, gameprofile, health, money, jackpots, buy, inv, iteminfo, mount, dismount, map, travel', true)
+        .addField('Commands', 'coinflip, help, rand, bet, mss, gameprofile, health, money, jackpots, buy, inv, iteminfo, mount, dismount, map, travel', true)
         .addField('coinflip command', `${prefix}coinflip + bet + Heads or Tails`)
         .addField('buy command', `${prefix}buy + item`)
         .addField('use command', `${prefix}use + item (+players ID)<= just if it is a damaging item`)
@@ -209,21 +241,19 @@ client.on("message", async message => {
         .addField('mount/dismount command', `${prefix}mount/dismount + vehiicel example: tank`)
         .addField('iteminfo command', `${prefix}iteminfo + item`)
         .addField('bet command', `It's One-Armed Bandit`)
-        .addField('myserverstats command', `Showes your general information`)
+        .addField('my-serverstats-command(mss)', `Showes your general information`)
         .addField('gameprofile command', 'Showes your game stats')
         .addField('poll command', `${prefix}poll (Title(First-Option(Second-Option(Third-Option(Fourth-Option\nDont't forget the (`)
     switch (command) {
         case 'help':
-
-
-
             message.channel.send(helpEmbed)
             break;
         case 'register':
+
             let role_rank_registered = message.guild.roles.find(r => r.name === "Registered");
             db.set(`${message.author.id}.username`, `${message.author.username}`)
             let username = db.get(`${message.author.id}.username`)
-            message.channel.send(`You are now registered as ${username}`)
+            message.reply(`You are now registered as ${username}`)
             message.author.send(helpEmbed)
             let member = message.member
             member.addRole(role_rank_registered).catch(console.error);
@@ -449,7 +479,7 @@ client.on("message", async message => {
                 let messageS = message.content
                 let Vorschlag = messageS.slice(3, 100000000000000)
                 message.delete()
-                
+
                 let VorschlagEmbed = new Discord.RichEmbed()
                     .setColor('#3333ff')
                     .setAuthor(`${message.author.username}`, `https://hypixel.net/attachments/apple-png.491344/`)
@@ -458,37 +488,37 @@ client.on("message", async message => {
                     .setImage('https://i.ya-webdesign.com/images/minecraft-golden-apples-png-5.png')
                     .setThumbnail('https://lh3.googleusercontent.com/3FnVwxGc-V61NeL5GcDD1w6QY7Gj5FIZkrKdJ72tCRNUEFZMxyiyRRkZ75BIQB8VqI286Bvpt8cvqkY0m50m=s400')
                     .setFooter(`It will be voted if this idea comes true | ${utcDate}`, `https://media.forgecdn.net/avatars/44/991/636038505047388846.png`)
-                channel.send(VorschlagEmbed).then(async msg => { 
+                channel.send(VorschlagEmbed).then(async msg => {
                     var messageToReactTo = (msg as Discord.Message);
-                try {
-                    await messageToReactTo.react('693038152528429106')
-                    await messageToReactTo.react('693038152281096203')
-                } catch (error) {
-                    console.log(error)
-                }
-                  });
+                    try {
+                        await messageToReactTo.react('693038152528429106')
+                        await messageToReactTo.react('693038152281096203')
+                    } catch (error) {
+                        console.log(error)
+                    }
+                });
                 channel.send("<@634724788761395201> @everyone")
                 break;
 
-                case 'poll':
-                    let messageSplit = message.content
-                    let restin = messageSplit.split("(")
-                    let Title = restin[1]
-                    let o1 = restin[2]
-                    let o2 = restin[3]
-                    let o3 = restin[4]
-                    let o4 = restin[5]
-                    message.delete()
-                    let pollEmbed = new Discord.RichEmbed()
-                        .setColor('#3333ff')
-                        .setAuthor(`${message.author.username}`, `https://cdn.discordapp.com/emojis/693466418162958456.png?v=1`)
-                        .setTitle(`Vote`)
-                        .setDescription(`**__${Title}__**\n🇦 ${o1}\n🇧 ${o2}\n🇨 ${o3}\n🇩 ${o4}`)
-                        .addField('`',`\n${emoji('692712407885283398')}${emoji('692712407507796010')}${emoji('693466387481624576')}${emoji('693466418141986836')}${emoji('693810476697518081')}`)
-                        .setThumbnail('https://lh3.googleusercontent.com/fyeHmp0-7Hn_xnYpNJmCZi8VsioJK-BKWfOxIOvta0EnWdvhkbzubwAK7gOjniX3ClQr8q0ABvLwGDTqqlR5kb0')
-                        .setFooter(`Vote | ${utcDate}`, `https://cdn.discordapp.com/emojis/693466418154569818.png?v=1`)
-                    message.channel.send(pollEmbed).then(async msg => { 
-                        var messageToReactTo = (msg as Discord.Message);
+            case 'poll':
+                let messageSplit = message.content
+                let restin = messageSplit.split("(")
+                let Title = restin[1]
+                let o1 = restin[2]
+                let o2 = restin[3]
+                let o3 = restin[4]
+                let o4 = restin[5]
+                message.delete()
+                let pollEmbed = new Discord.RichEmbed()
+                    .setColor('#3333ff')
+                    .setAuthor(`${message.author.username}`, `https://cdn.discordapp.com/emojis/693466418162958456.png?v=1`)
+                    .setTitle(`Vote`)
+                    .setDescription(`**__${Title}__**\n🇦 ${o1}\n🇧 ${o2}\n🇨 ${o3}\n🇩 ${o4}`)
+                    .addField('`', `\n${emoji('692712407885283398')}${emoji('692712407507796010')}${emoji('693466387481624576')}${emoji('693466418141986836')}${emoji('693810476697518081')}`)
+                    .setThumbnail('https://lh3.googleusercontent.com/fyeHmp0-7Hn_xnYpNJmCZi8VsioJK-BKWfOxIOvta0EnWdvhkbzubwAK7gOjniX3ClQr8q0ABvLwGDTqqlR5kb0')
+                    .setFooter(`Vote | ${utcDate}`, `https://cdn.discordapp.com/emojis/693466418154569818.png?v=1`)
+                message.channel.send(pollEmbed).then(async msg => {
+                    var messageToReactTo = (msg as Discord.Message);
                     try {
                         await messageToReactTo.react('🇦')
                         await messageToReactTo.react('🇧')
@@ -497,9 +527,13 @@ client.on("message", async message => {
                     } catch (error) {
                         console.log(error)
                     }
-                      });
-                    message.channel.send("@everyone")
-                    break;
+                });
+                message.channel.send("@everyone")
+                break;
+            case 'emojilist':
+                const emojiList = message.guild.emojis.map(e => e.toString()).join(" ");
+                message.channel.send(emojiList);
+                break;
             case `settings`:
                 let settingsEmbed = new Discord.RichEmbed()
                     .setTitle(`Settings of ${message.author.username} ⚙️`)
@@ -552,7 +586,7 @@ client.on("message", async message => {
                     .setDescription(`These are your general Server stats`)
                     .addField(`Letters send`, `${playersLettersSend}`, true)
                     .addField('ID', `${message.author.id}`, true)
-                    .addField(`Joined`, `${JoinedAt}` , true)
+                    .addField(`Joined`, `${JoinedAt}`, true)
                 message.channel.send(serverEmbed)
 
                 break;
@@ -876,7 +910,7 @@ client.on("message", async message => {
                 let mapEmbed = new Discord.RichEmbed()
                     .setTitle(`Worldmap`)
                     .setDescription(`This showes where you are located`)
-                    .addField(`All` , `Europe:\n${germany}\n${france}\n${italy}\n${spain}\nAmerica:\n${texas}\n${ohio}\n${michigan}\n${virgina}\n${hawaii}\nAsia:\n${japan}\n${india}\n${thailand}`, false)
+                    .addField(`All`, `Europe:\n${germany}\n${france}\n${italy}\n${spain}\nAmerica:\n${texas}\n${ohio}\n${michigan}\n${virgina}\n${hawaii}\nAsia:\n${japan}\n${india}\n${thailand}`, false)
                 message.channel.send(mapEmbed)
                 break;
             case 'travel':
