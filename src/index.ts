@@ -136,6 +136,7 @@ client.on("message", async message => {
             .setTitle(`${message.author.username} just ranked up`)
             .setThumbnail(message.author.avatarURL)
             .setDescription(`${OldRank} => ${NewRank}`)
+            .setFooter(`${utcDate}`)
         let channel = client.channels.get("694940476192850030") as Discord.TextChannel;
         channel.send(rankUpEmbed)
         channel.send(`<@${member.id}>`)
