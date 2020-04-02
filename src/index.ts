@@ -821,6 +821,15 @@ client.on("message", async message => {
                 }
                 useItem(usingItem)
                 break;
+            case 'botinfo':
+                let botinfoEmbed = new Discord.RichEmbed()
+                    .setTitle(`${client.user.username} Info`)
+                    .addField(`ID`, `${client.user.id}`)
+                    .addField(`Made on`,`${client.user.createdAt}`)
+                    .setThumbnail(client.user.avatarURL)
+                    .setFooter(`Created by Pacific Range`)
+                message.channel.send(botinfoEmbed)
+                break;
             case 'iteminfo':
                 let str4 = message.content;
                 let res4 = str4.split(" ");
