@@ -27,7 +27,7 @@ client.on("ready", () => {
     let allUsers = client.users.array();
     for (let i = 0; i < allUsers.length; i++) {
         if (isNull(db.get(allUsers[i].id))) {
-            db.set(allUsers[i].id, { money: 50, health: 100, Jackpots: 0, lettersSend: 0, grenade: 0, health_potion: 0, tank: 0, tank_bullet: 0, location: 'germany', vehicel: 'None', username: 'None', foreverItems: [] })
+            db.set(allUsers[i].id, { money: 50, health: 100, Jackpots: 0, lettersSend: 0, grenade: 0, health_potion: 0, tank: 0, tank_bullet: 0, location: 'germany', vehicel: 'None', username: 'None',usedcommand: 0,other1: 0,other2: 0,other3: 0,other4: 0,other5: 0,other6: 0,other7: 0,other8: 0,other9: 0,other10: 0,settings1: 'None',settings2: 'None',settings3: 'None', foreverItems: [] })
         }
     }
     console.log(chalk.keyword('green')('Ready to go!'));
@@ -44,14 +44,18 @@ client.on("guildMemberAdd", member => {
         .setImage(`https://lh3.googleusercontent.com/vXkmWB0PqPuef9OxBNc6PMDdZJhNx-D-3sRQBZ_f7kj8mtkWD6_xaAT9a6J7u1usgIBBK5RRmioSPzsSpf5r=s400`)
     welcomeChannel.send(welcomeEmbed)
     if (isNull(db.get(member.id))) {
-        db.set(member.id, { money: 50, health: 100, Jackpots: 0, lettersSend: 0, grenade: 0, health_potion: 0, tank: 0, tank_bullet: 0, location: 'germany', vehicel: 'None', username: 'None', foreverItems: [] })
+        db.set(member.id, { money: 50, health: 100, Jackpots: 0, lettersSend: 0, grenade: 0, health_potion: 0, tank: 0, tank_bullet: 0, location: 'germany', vehicel: 'None', username: 'None',usedcommand: 0,other1: 0,other2: 0,other3: 0,other4: 0,other5: 0,other6: 0,other7: 0,other8: 0,other9: 0,other10: 0,settings1: 'None',settings2: 'None',settings3: 'None', foreverItems: [] })
     }
 
 
 })
 client.on("message", async message => {
+    if (message.content.startsWith(`${prefix}`)) {
+        db.add(`${message.author.id}.usedcommand`, 1)    
+    }
     db.add(`${message.author.id}.lettersSend`, message.content.split("").length)
     let playersLettersSend = db.get(`${message.author.id}.lettersSend`)
+    let playersusedCommand = db.get(`${message.author.id}.usedcommand`)
     let playersMoney = db.get(`${message.author.id}.money`)
     let playersHealth = db.get(`${message.author.id}.health`)
     let amountGrenades = db.get(`${message.author.id}.grenade`)
@@ -586,6 +590,7 @@ client.on("message", async message => {
                     .setTitle(`${message.author.username}'s serverstats`)
                     .setDescription(`These are your general Server stats`)
                     .addField(`Letters send`, `${playersLettersSend}`, true)
+                    .addField(`Used Commands`, `${playersusedCommand}`, true)
                     .addField('ID', `${message.author.id}`, true)
                     .addField(`Joined`, `${JoinedAt}`, true)
                 message.channel.send(serverEmbed)
