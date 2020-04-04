@@ -14,7 +14,7 @@ import * as chalk from "chalk"
 
 
 const client: Discord.Client = new Discord.Client();
-const prefix = ConfigFile.config2.prefix
+
 const code = Math.floor(Math.random() * 1000)
 let dt = new Date();
 let utcDate = dt.toUTCString();
@@ -50,6 +50,10 @@ client.on("guildMemberAdd", member => {
 
 })
 client.on("message", async message => {
+    let prefix = db.get(`${message.author.id}.settings1`)
+    if (prefix == `None`) {
+        db.set(`${message.author.id}.settings1`, `/`)
+    }
     if (message.content.startsWith(`${prefix}`)) {
         db.add(`${message.author.id}.usedcommand`, 1)    
     }
@@ -542,7 +546,8 @@ client.on("message", async message => {
             case `settings`:
                 let settingsEmbed = new Discord.RichEmbed()
                     .setTitle(`Settings of ${message.author.username} ⚙️`)
-                    .setDescription(`<<This feature isn't coded yet>>`)
+                    .setDescription(`Some things youcan customize`)
+                    .addField(`Own prefix`, `${prefix}`)
                 message.channel.send(settingsEmbed)
                 break;
             case `${code}`:
