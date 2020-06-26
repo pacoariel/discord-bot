@@ -47,6 +47,7 @@ client.on("message", message =>{
             .setTitle("Help")
             .setDescription("Command and under it is description")
             .addField("help" , "outputs this embed", false)
+            .addField("botinnfo" , "outputs info about the bot", false)
             .addField("invite" , "outputs the bot invite", false)
             .addField("support" , "outputs the support server invite", false)
             .addField("bal" , "outputs your money", false)
@@ -82,8 +83,10 @@ client.on("message", message =>{
         function cake(file:string, description:string) {
             message.channel.send(description, { files: [`${file}`] })
         }
-        let random2 = Math.floor(Math.random()* 99) +1
-        if ( 100 > random2 && random2 > 90) {
+        let random2 = Math.floor(Math.random()* 109) +1
+        if (110 > random2 && random2 > 100) {
+            cake("../assets/cakes/5.jpeg","Oreo with a big pile of fruits....") 
+        } else if ( 100 > random2 && random2 > 90) {
             cake("../assets/cakes/1.jpeg","Rainbows.... Wait what **no** rainbows don't have white!??!?!")
         } else if (90 > random2 && random2 > 80){
             cake("../assets/cakes/2.jpeg","Choclate hearts.... Lovely.")
@@ -91,12 +94,10 @@ client.on("message", message =>{
             cake("../assets/cakes/3.jpeg","Not so smart now huh. Understood ? Cause of **SMART**ies?? Not funny? K 😭.") 
         } else if (70 > random2 && random2 > 60) {
             cake("../assets/cakes/4.jpeg","Hmmm this looks veeeeeery yummy.") 
-        } else if (70 > random2 && random2 > 60) {
-            cake("../assets/cakes/5.jpeg","Oreo with a big pile of fruits....") 
-        } else if (70 > random2 && random2 > 65) {
+        } else if (60 > random2 && random2 > 55) {
             db.add(`${message.author.id}.money`, 100)
             cake("../assets/cakes/6.jpeg","This is the rarest cake of the collection :-). You amazed? No? Ok you get the 100$ anyways.") 
-        } else if (65 > random2 && random2 > 50) {
+        } else if (55 > random2 && random2 > 50) {
             db.add(`${message.author.id}.money`, 75)
             cake("../assets/cakes/7.jpeg","This is also a rare cake though not the rarest. You get 75$.") 
         } else if (50 > random2 && random2 > 40) {
@@ -110,6 +111,17 @@ client.on("message", message =>{
         } else if (10 > random2 && random2 > 0) {
             cake("../assets/cakes/12.jpeg","Trippel Oreo with rainbow Stuff on it..... I like it!") 
         }
+        break;
+        case`botinfo`:
+        let botinfoEmbed = new Discord.RichEmbed()
+            .setColor("")
+            .setAuthor("Owner: CAKE BOI", "https://cdn.discordapp.com/attachments/725324556696420402/726000190095622214/Cake-Boi.jpeg")
+            .setTitle("**Cakey 2.0**")
+            .setDescription("CAKEYS SON")
+            .setThumbnail(`https://cdn.discordapp.com/attachments/725324556696420402/725992377575145523/Cakey_logo.png`)
+            .setFooter("Creator: Pacific Range","https://cdn.discordapp.com/attachments/725324556696420402/725999010619457586/PacificRangePFP.png")
+            message.channel.send(botinfoEmbed)
+        break;
     }
 })
 client.login(ConfigFile.config2.token);
